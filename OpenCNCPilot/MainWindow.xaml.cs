@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using OpenCNCPilot.Communication;
 using OpenCNCPilot.GCode;
 using OpenCNCPilot.Util;
@@ -86,7 +86,7 @@ namespace OpenCNCPilot
 			CheckBoxUseExpressions_Changed(null, null);
 			ButtonRestoreViewport_Click(null, null);
 
-			UpdateCheck.CheckForUpdate();
+			// UpdateCheck.CheckForUpdate();
 
 			if (App.Args.Length > 0)
 			{
@@ -179,9 +179,9 @@ namespace OpenCNCPilot
 			get
 			{
 				if (CurrentFileName.Length < 1)
-					return $"OpenCNCPilot v{Version} by martin2250";
+					return $"VL PCB v{Version} by VlogInnovation LLP.";
 				else
-					return $"OpenCNCPilot v{Version} by martin2250 - {CurrentFileName}";
+					return $"VL PCB v{Version} by VlogInnovation LLP. - {CurrentFileName}";
 			}
 		}
 

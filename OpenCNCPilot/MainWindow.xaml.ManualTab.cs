@@ -1,4 +1,4 @@
-﻿using OpenCNCPilot.Communication;
+using OpenCNCPilot.Communication;
 using OpenCNCPilot.Util;
 using System.Collections.Generic;
 using System.Windows;
@@ -204,6 +204,91 @@ namespace OpenCNCPilot
 			if (direction != null)
 			{
 				machine.SendLine(string.Format(Constants.DecimalOutputFormat, "$J=G91F{0:0.#}{1}{2:0.###}", feed, direction, distance));
+			}
+		}
+
+		private void ButtonJog_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		{
+			if (!machine.Connected)
+			{
+				MessageBox.Show("Machine is not connected!");
+				return;
+			}
+
+			if (machine.Status == "Alarm")
+			{
+				MessageBox.Show("Machine is in Alarm state! You must Home ($H) or Unlock ($X) first.");
+				return;
+			}
+
+			if (machine.BufferState > 0 || machine.Status != "Idle")
+			{
+				// Only show message box if it's not already jogging, to avoid spam
+				if (machine.Status != "Jog")
+					MessageBox.Show("Machine must be Idle to jog. Current status: " + machine.Status);
+				return;
+			}
+
+			string direction = (sender as Button)?.Tag as string;
+			if (direction == null) return;
+
+			double feed = Properties.Settings.Default.JogFeed;
+			
+			// Use a very large distance for continuous joystick-style jogging
+			double distance = 10000.0;
+
+			if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+			{
+				feed = Properties.Settings.Default.JogFeedCtrl;
+			}
+
+			string distStr = distance.ToString("0.###", Constants.DecimalOutputFormat);
+			string axisCommand = "";
+
+			if (direction == "X-Y") axisCommand = $"X-{distStr} Y{distStr}";
+			else if (direction == "XY") axisCommand = $"X{distStr} Y{distStr}";
+			else if (direction == "X-Y-") axisCommand = $"X-{distStr} Y-{distStr}";
+			else if (direction == "XY-") axisCommand = $"X{distStr} Y-{distStr}";
+			else if (direction == "X-") axisCommand = $"X-{distStr}";
+			else if (direction == "X") axisCommand = $"X{distStr}";
+			else if (direction == "Y-") axisCommand = $"Y-{distStr}";
+			else if (direction == "Y") axisCommand = $"Y{distStr}";
+			else if (direction == "Z-") axisCommand = $"Z-{distStr}";
+			else if (direction == "Z") axisCommand = $"Z{distStr}";
+
+			machine.SendLine(string.Format(Constants.DecimalOutputFormat, "$J=G91 {0} F{1:0.#}", axisCommand, feed));
+		}
+
+		private void ButtonJog_MouseUp(object sender, System.Windows.Input.MouseEventArgs e)
+		{
+			if (!machine.Connected) return;
+			machine.JogCancel();
+		}
+
+		private void ButtonJog_Click(object sender, RoutedEventArgs e)
+		{
+			string direction = (sender as Button)?.Tag as string;
+			if (direction == "STOP")
+			{
+				machine.JogCancel();
+			}
+		}
+
+		private void ButtonPresetStep_Click(object sender, RoutedEventArgs e)
+		{
+			if (double.TryParse((sender as Button)?.Content?.ToString(), out double val))
+			{
+				Properties.Settings.Default.JogDistance = val;
+				Properties.Settings.Default.Save();
+			}
+		}
+
+		private void ButtonPresetFeed_Click(object sender, RoutedEventArgs e)
+		{
+			if (double.TryParse((sender as Button)?.Content?.ToString(), out double val))
+			{
+				Properties.Settings.Default.JogFeed = val;
+				Properties.Settings.Default.Save();
 			}
 		}
 

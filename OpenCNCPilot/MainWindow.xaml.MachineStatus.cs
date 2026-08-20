@@ -1,4 +1,4 @@
-﻿using OpenCNCPilot.Communication;
+using OpenCNCPilot.Communication;
 using OpenCNCPilot.GCode;
 using OpenCNCPilot.Util;
 using System;
@@ -124,6 +124,36 @@ namespace OpenCNCPilot
 				return;
 
 			machine.SendLine("$X");
+		}
+
+		private void ButtonInvertYHoming_Click(object sender, RoutedEventArgs e)
+		{
+			if (!machine.Connected)
+			{
+				MessageBox.Show("Machine is not connected!");
+				return;
+			}
+			
+			if (machine.Mode != Communication.Machine.OperatingMode.Manual)
+				return;
+
+			machine.SendLine("$23=2");
+			Machine_Info("Sent command to invert Y homing ($23=2)");
+		}
+
+		private void ButtonResetYHoming_Click(object sender, RoutedEventArgs e)
+		{
+			if (!machine.Connected)
+			{
+				MessageBox.Show("Machine is not connected!");
+				return;
+			}
+			
+			if (machine.Mode != Communication.Machine.OperatingMode.Manual)
+				return;
+
+			machine.SendLine("$23=0");
+			Machine_Info("Sent command to reset Y homing ($23=0)");
 		}
 
 		private void AddHistoryItem(ListBoxItem item)

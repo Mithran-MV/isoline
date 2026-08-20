@@ -1,4 +1,4 @@
-﻿using OpenCNCPilot.Communication;
+using OpenCNCPilot.Communication;
 using OpenCNCPilot.GCode;
 using OpenCNCPilot.Util;
 using System;
@@ -217,6 +217,8 @@ namespace OpenCNCPilot
 			machine.SendLine("G91");
 			machine.SendLine($"G0Z{Properties.Settings.Default.ProbeMinimumHeight.ToString("0.###", Constants.DecimalOutputFormat)}");
 			machine.SendLine("G90");
+			
+			Machine_Info($"PROBE: Moving to next target at X: {nextPoint.X:0.###}, Y: {nextPoint.Y:0.###}...");
 		}
 
 		private void Machine_ProbeFinished(Vector3 position, bool success)
@@ -232,11 +234,14 @@ namespace OpenCNCPilot
 
 			if (!success && Properties.Settings.Default.AbortOnProbeFail)
 			{
+				Machine_Info("PROBE ERROR: Probe Failed! Aborting.");
 				MessageBox.Show("Probe Failed! aborting");
 
 				machine.ProbeStop();
 				return;
 			}
+			
+			Machine_Info($"PROBE: Contact detected at Z: {position.Z:0.###}");
 
 			Tuple<int, int> lastPoint = Map.NotProbed[0];
 			Map.NotProbed.RemoveAt(0);
@@ -247,7 +252,7 @@ namespace OpenCNCPilot
 			{
 				machine.SendLine($"G0Z{Math.Max(Properties.Settings.Default.ProbeSafeHeight, position.Z).ToString(Constants.DecimalOutputFormat)}");
 				machine.ProbeStop();
-				Machine_Info("HeightMap complete!");
+				Machine_Info("PROBE: HeightMap sequence is fully complete!");
 
 				if (Properties.Settings.Default.BackupHeightMap)
 				{
@@ -288,6 +293,7 @@ namespace OpenCNCPilot
 			machine.SendLine("G90");
 			machine.SendLine($"G0Z{Properties.Settings.Default.ProbeSafeHeight.ToString("0.###", Constants.DecimalOutputFormat)}");
 
+			Machine_Info("PROBE: Sequence initiated.");
 			HeightMapProbeNextPoint();
 		}
 

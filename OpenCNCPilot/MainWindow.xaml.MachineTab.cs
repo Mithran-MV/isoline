@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 
 namespace OpenCNCPilot
@@ -72,8 +72,17 @@ namespace OpenCNCPilot
 
 		private void ButtonMachineHome_Click(object sender, RoutedEventArgs e)
 		{
-			if (machine.Mode != Communication.Machine.OperatingMode.Manual)
+			if (!machine.Connected)
+			{
+				MessageBox.Show("Machine is not connected!");
 				return;
+			}
+			
+			if (machine.Mode != Communication.Machine.OperatingMode.Manual)
+			{
+				MessageBox.Show("Cannot home machine while in mode: " + machine.Mode);
+				return;
+			}
 
 			machine.SendLine("$H");
 		}

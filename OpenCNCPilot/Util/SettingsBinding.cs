@@ -1,4 +1,4 @@
-﻿using System.Windows.Data;
+using System.Windows.Data;
 
 namespace OpenCNCPilot.Util
 {
@@ -19,6 +19,7 @@ namespace OpenCNCPilot.Util
 		{
 			Source = Properties.Settings.Default;
 			Mode = BindingMode.TwoWay;
+			UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
 		}
 	}
 }
