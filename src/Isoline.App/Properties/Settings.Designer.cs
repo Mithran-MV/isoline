@@ -706,5 +706,245 @@ namespace Isoline.Properties {
                 this["ProbeOffsetY"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Dark")]
+        public string Theme {
+            get {
+                return ((string)(this["Theme"]));
+            }
+            set {
+                this["Theme"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Bicubic")]
+        public string HeightMapInterpolation {
+            get {
+                return ((string)(this["HeightMapInterpolation"]));
+            }
+            set {
+                this["HeightMapInterpolation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ProbeRejectOutliers {
+            get {
+                return ((bool)(this["ProbeRejectOutliers"]));
+            }
+            set {
+                this["ProbeRejectOutliers"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3.5")]
+        public double ProbeOutlierThreshold {
+            get {
+                return ((double)(this["ProbeOutlierThreshold"]));
+            }
+            set {
+                this["ProbeOutlierThreshold"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.2")]
+        public double IsolationToolDiameter {
+            get {
+                return ((double)(this["IsolationToolDiameter"]));
+            }
+            set {
+                this["IsolationToolDiameter"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsolationUseVBit {
+            get {
+                return ((bool)(this["IsolationUseVBit"]));
+            }
+            set {
+                this["IsolationUseVBit"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public double IsolationVBitAngle {
+            get {
+                return ((double)(this["IsolationVBitAngle"]));
+            }
+            set {
+                this["IsolationVBitAngle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.1")]
+        public double IsolationVBitTip {
+            get {
+                return ((double)(this["IsolationVBitTip"]));
+            }
+            set {
+                this["IsolationVBitTip"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int IsolationPasses {
+            get {
+                return ((int)(this["IsolationPasses"]));
+            }
+            set {
+                this["IsolationPasses"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.8")]
+        public double IsolationStepover {
+            get {
+                return ((double)(this["IsolationStepover"]));
+            }
+            set {
+                this["IsolationStepover"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-0.1")]
+        public double IsolationCutDepth {
+            get {
+                return ((double)(this["IsolationCutDepth"]));
+            }
+            set {
+                this["IsolationCutDepth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public double IsolationSafeHeight {
+            get {
+                return ((double)(this["IsolationSafeHeight"]));
+            }
+            set {
+                this["IsolationSafeHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("300")]
+        public double IsolationFeedRate {
+            get {
+                return ((double)(this["IsolationFeedRate"]));
+            }
+            set {
+                this["IsolationFeedRate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public double IsolationPlungeRate {
+            get {
+                return ((double)(this["IsolationPlungeRate"]));
+            }
+            set {
+                this["IsolationPlungeRate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10000")]
+        public double IsolationSpindleSpeed {
+            get {
+                return ((double)(this["IsolationSpindleSpeed"]));
+            }
+            set {
+                this["IsolationSpindleSpeed"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsolationOptimiseTravel {
+            get {
+                return ((bool)(this["IsolationOptimiseTravel"]));
+            }
+            set {
+                this["IsolationOptimiseTravel"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool JobRecoveryEnabled {
+            get {
+                return ((bool)(this["JobRecoveryEnabled"]));
+            }
+            set {
+                this["JobRecoveryEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool FirstRunComplete {
+            get {
+                return ((bool)(this["FirstRunComplete"]));
+            }
+            set {
+                this["FirstRunComplete"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EthernetUseWebSocket {
+            get {
+                return ((bool)(this["EthernetUseWebSocket"]));
+            }
+            set {
+                this["EthernetUseWebSocket"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoBufferSizeFromFirmware {
+            get {
+                return ((bool)(this["AutoBufferSizeFromFirmware"]));
+            }
+            set {
+                this["AutoBufferSizeFromFirmware"] = value;
+            }
+        }
     }
 }
