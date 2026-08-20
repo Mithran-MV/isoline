@@ -148,6 +148,11 @@
                                 <Button Name="ButtonFileClear" Click="ButtonClear_Click" Content="Clear" Style="{StaticResource styleButton}" Grid.Column="2" Margin="5,0,0,0"/>
                             </Grid>
 
+                            <!-- Gerber straight to toolpath, no external CAM step -->
+                            <Button Name="ButtonImportGerber" Click="ButtonImportGerber_Click"
+                                    Content="Import Gerber..." Style="{StaticResource PrimaryButton}"
+                                    Margin="0,0,0,10" ToolTip="Read a copper layer and generate the isolation toolpath"/>
+                            
                             <!-- File progress -->
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,5">
                                 <TextBlock Foreground="{DynamicResource TextMutedBrush}" Text="Lines: "/>
