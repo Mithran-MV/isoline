@@ -87,7 +87,11 @@ namespace Isoline
 			CheckBoxUseExpressions_Changed(null, null);
 			ButtonRestoreViewport_Click(null, null);
 
-			// UpdateCheck.CheckForUpdate();
+			UpdateStatePill();
+			UpdateJobProgress();
+
+
+			UpdateCheck.CheckForUpdate();
 
 			if (App.Args.Length > 0)
 			{

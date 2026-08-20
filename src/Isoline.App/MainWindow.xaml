@@ -14,6 +14,11 @@
 		PreviewKeyDown="Window_PreviewKeyDown"
 		Icon="Resources/Isoline.png"
 		Title="{Binding WindowTitle,Mode=OneWay}" Height="{util:SettingBinding WindowHeight}" Width="{util:SettingBinding WindowWidth}" Closing="Window_Closing">
+    <Window.TaskbarItemInfo>
+        <!-- mirrors the job progress onto the taskbar button -->
+        <TaskbarItemInfo x:Name="TaskbarInfo" ProgressState="None" ProgressValue="0"/>
+    </Window.TaskbarItemInfo>
+
     <Window.Resources>
         <ResourceDictionary Source="MainWindow.Resources.xaml"/>
     </Window.Resources>
@@ -30,8 +35,20 @@
                     <Button Name="ButtonSettings" Content="Settings" Style="{StaticResource styleButton}" Click="ButtonSettings_Click" Margin="0,0,10,0"/>
                     <Button Content="GRBL Settings" Style="{StaticResource styleButton}" Click="ShowGrblSettings_Click" Name="ButtonGrblSettings" Margin="0,0,20,0"/>
                     
-                    <Border Background="{DynamicResource SurfaceOverlayBrush}" CornerRadius="4" Padding="5,0" Margin="0,0,10,0">
-                         <Button Name="ButtonStatus" Content="Disconnected" Click="ButtonStatus_Click" Style="{StaticResource styleButton}" Background="Transparent" Foreground="{DynamicResource WarningTextBrush}" FontWeight="Bold" ToolTip="Machine Status - Click to send $X to unlock" BorderThickness="0"/>
+                    <!--
+                        Machine state pill. Colour and label come from StatusPresentation so
+                        that "Alarm" is unmistakable at a glance and "Idle" is legible -
+                        it used to be painted black on a dark background.
+                    -->
+                    <Border Name="StatePillBorder" Style="{StaticResource StatePill}" Margin="0,0,10,0"
+                            Background="{DynamicResource SurfaceOverlayBrush}" BorderBrush="{DynamicResource LineBrush}"
+                            MouseLeftButtonUp="ButtonStatus_Click" Cursor="Hand">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Name="StatePillDot" Width="8" Height="8" Margin="0,0,8,0" VerticalAlignment="Center"
+                                     Fill="{DynamicResource TextSubtleBrush}"/>
+                            <TextBlock Name="ButtonStatus" Text="OFFLINE" Style="{StaticResource StatePillText}"
+                                       Foreground="{DynamicResource TextSubtleBrush}"/>
+                        </StackPanel>
                     </Border>
                 </StackPanel>
                 
@@ -55,6 +72,61 @@
                     <Button Name="ButtonDistanceMode" Content="Absolute" Click="ButtonDistanceMode_Click" Margin="0,0,5,0" Style="{StaticResource styleButton}" ToolTip="Distance Mode - Click to Toggle"/>
                     <Button Name="ButtonArcPlane" Content="XY-Plane" Click="ButtonArcPlane_Click" Margin="0,0,0,0" Style="{StaticResource styleButton}" ToolTip="Arc Plane - Click to Reset to XY"/>
                 </StackPanel>
+            </Grid>
+        </Border>
+
+        <!--
+            Alarm / error banner. Docked above everything and stays put until dismissed:
+            an alarm that scrolls out of the console unread is how an operator ends up
+            wondering why the machine stopped.
+        -->
+        <Border Name="AlertBanner" DockPanel.Dock="Top" Style="{StaticResource Banner}" Visibility="Collapsed"
+                Background="{DynamicResource SurfaceRaisedBrush}" BorderBrush="{DynamicResource DangerBrush}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Name="AlertAccent" Grid.Column="0" Background="{DynamicResource DangerBrush}"
+                        CornerRadius="2" Margin="0,0,12,0"/>
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Name="AlertTitle" Style="{StaticResource BannerTitle}"
+                               Foreground="{DynamicResource DangerTextBrush}" Text="Alarm"/>
+                    <TextBlock Name="AlertBody" Style="{StaticResource BannerBody}" Text=""/>
+                </StackPanel>
+
+                <Button Name="ButtonAlertAction" Grid.Column="2" Content="Unlock" Click="ButtonAlertAction_Click"
+                        Style="{StaticResource WarningButton}" Margin="12,0,6,0" Visibility="Collapsed"/>
+                <Button Grid.Column="3" Content="Dismiss" Click="ButtonAlertDismiss_Click"
+                        Style="{StaticResource styleButton}"/>
+            </Grid>
+        </Border>
+
+        <!-- Job progress: percentage, elapsed and estimated time remaining -->
+        <Border Name="JobProgressBar" DockPanel.Dock="Top" Visibility="Collapsed"
+                Background="{DynamicResource SurfaceRaisedBrush}" BorderBrush="{DynamicResource LineBrush}"
+                BorderThickness="0,0,0,1" Padding="12,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Name="LabelJobPercent" Grid.Column="0" Text="0%" MinWidth="52"
+                           FontFamily="{DynamicResource NumericFont}" FontWeight="Bold"
+                           Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+
+                <ProgressBar Name="BarJobProgress" Grid.Column="1" Style="{StaticResource JobProgress}"
+                             Minimum="0" Maximum="1" Value="0" Margin="8,0"/>
+
+                <TextBlock Name="LabelJobTime" Grid.Column="2" Text="00:00 elapsed"
+                           FontFamily="{DynamicResource NumericFont}" FontSize="{DynamicResource FontSizeS}"
+                           Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center"/>
             </Grid>
         </Border>
 

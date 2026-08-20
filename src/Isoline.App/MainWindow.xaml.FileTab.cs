@@ -86,15 +86,22 @@ namespace Isoline
 
 			machine.ClearFile();
 			CurrentFileName = "";
+
 		}
 
 		private void ButtonFileStart_Click(object sender, RoutedEventArgs e)
 		{
+			jobProgress.Start(machine.File.Count, machine.FilePosition);
+			UpdateJobProgress();
+
 			machine.FileStart();
 		}
 
 		private void ButtonFilePause_Click(object sender, RoutedEventArgs e)
 		{
+			jobProgress.Pause();
+			UpdateJobProgress();
+
 			machine.FilePause();
 		}
 

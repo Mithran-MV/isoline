@@ -39,16 +39,21 @@ namespace Isoline
 
 		private void Machine_StatusChanged()
 		{
-			ButtonStatus.Content = machine.Status;
+			UpdateStatePill();
+			UpdateJobProgress();
 
-			if (machine.Status == "Alarm")
-				ButtonStatus.Foreground = Brushes.Red;
-			else if (machine.Status == "Hold")
-				ButtonStatus.Foreground = Brushes.Yellow;
-			else if (machine.Status == "Run")
-				ButtonStatus.Foreground = Brushes.Green;
-			else
-				ButtonStatus.Foreground = Brushes.Black;
+			// An alarm locks the controller out; say so where it cannot be missed rather
+			// than leaving the operator to spot ALARM:3 going past in the console.
+			if (machine.Status != null && machine.Status.StartsWith("Alarm", StringComparison.OrdinalIgnoreCase)
+				&& AlertBanner.Visibility != Visibility.Visible)
+			{
+				ShowAlert(new Machines.AlarmInfo()
+				{
+					IsAlarm = true,
+					Title = "The controller is in alarm",
+					Remedy = "Motion is locked out. Find out why before unlocking - after an alarm the machine position is no longer trusted, so re-home before cutting.",
+				});
+			}
 
 			if (StopRuntimeOnIdle && machine.Status == "Idle")
 			{
@@ -175,6 +180,11 @@ namespace Isoline
 
 		private void Machine_NonFatalException(string obj)
 		{
+			Machines.AlarmInfo decoded = Machines.StatusPresentation.Decode(obj);
+
+			if (decoded != null)
+				ShowAlert(decoded);
+
 			ListBoxItem item = new ListBoxItem();
 			item.Content = obj;
 			item.Foreground = Brushes.Red;
@@ -234,6 +244,9 @@ namespace Isoline
 		private void Machine_FilePositionChanged()
 		{
 			RunFilePosition.Text = machine.FilePosition.ToString();
+
+			jobProgress.Update(machine.FilePosition);
+			UpdateJobProgress();
 
 			if (ListViewFile.SelectedItem is TextBlock)
 			{
