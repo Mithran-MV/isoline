@@ -366,10 +366,23 @@ Be aware that the affected lines will likely move when using edit functions." + 
 
 		private void Machine_OperatingMode_Changed()
 		{
+			// Leaving SendFile means the job either finished or was stopped. Either way the
+			// clock stops, and a completed job must not leave a recovery point behind that
+			// would offer to resume it on the next launch.
+			if (machine.Mode != Machine.OperatingMode.SendFile && jobProgress.Running)
+			{
+				jobProgress.Pause();
+
+				if (machine.FilePosition >= machine.File.Count && machine.File.Count > 0)
+					EndRecoveryTracking();
+
+				UpdateJobProgress();
+			}
+
 			ButtonDistanceMode.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
 			ButtonUnit.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
 			ButtonArcPlane.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
-			ButtonStatus.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
+			StatePillBorder.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
 			ButtonFeedRateOvr.IsEnabled = machine.Mode != Machine.OperatingMode.Disconnected;
 
 			ButtonFeedHold.IsEnabled = machine.Mode != Machine.OperatingMode.Disconnected;
