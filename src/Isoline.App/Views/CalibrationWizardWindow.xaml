@@ -1,0 +1,81 @@
+<Window x:Class="Isoline.CalibrationWizardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Calibrate steps per millimetre" Height="560" Width="560"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        Background="{DynamicResource SurfaceBrush}">
+
+    <!--
+        Steps/mm is the one setting you cannot eyeball: a 3% error looks fine on a jog and
+        ruins a board. The only honest way to find it is to command a known move, measure
+        what the machine actually did, and scale the current value by the ratio.
+    -->
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
+            <TextBlock Text="Measure, then correct" FontSize="{DynamicResource FontSizeXl}" FontWeight="Bold"
+                       Foreground="{DynamicResource TextBrush}"/>
+            <TextBlock Text="Mark the current position, run the test move, measure the real distance with calipers or a rule, and type it in."
+                       Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1">
+
+            <TextBlock Text="STEP 1 - CHOOSE THE AXIS" Style="{StaticResource SectionCaption}"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                <RadioButton Name="RadioX" Content="X" IsChecked="True" GroupName="Axis" Margin="0,0,16,0"
+                             Foreground="{DynamicResource TextMutedBrush}" Checked="Axis_Checked"/>
+                <RadioButton Name="RadioY" Content="Y" GroupName="Axis" Margin="0,0,16,0"
+                             Foreground="{DynamicResource TextMutedBrush}" Checked="Axis_Checked"/>
+                <RadioButton Name="RadioZ" Content="Z" GroupName="Axis"
+                             Foreground="{DynamicResource TextMutedBrush}" Checked="Axis_Checked"/>
+            </StackPanel>
+            <TextBlock Name="LabelCurrent" Style="{StaticResource BannerBody}" Margin="0,0,0,16"
+                       Text="Current value: unknown - press Read from controller first."/>
+
+            <TextBlock Text="STEP 2 - RUN THE TEST MOVE" Style="{StaticResource SectionCaption}"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                <TextBox Name="TextCommanded" Text="50" Width="90" VerticalContentAlignment="Center"/>
+                <TextBlock Text="mm at" VerticalAlignment="Center" Margin="8,0"
+                           Foreground="{DynamicResource TextMutedBrush}"/>
+                <TextBox Name="TextFeed" Text="500" Width="90" VerticalContentAlignment="Center"/>
+                <TextBlock Text="mm/min" VerticalAlignment="Center" Margin="8,0"
+                           Foreground="{DynamicResource TextMutedBrush}"/>
+                <Button Content="Move" Click="ButtonMove_Click" Style="{StaticResource PrimaryButton}"
+                        MinWidth="90" Margin="8,0,0,0"/>
+            </StackPanel>
+            <TextBlock Style="{StaticResource BannerBody}" Margin="0,0,0,16" TextWrapping="Wrap"
+                       Text="The move is relative (G91), so it starts wherever the tool is now. Make sure there is room, and that nothing is clamped in the way."/>
+
+            <TextBlock Text="STEP 3 - MEASURE WHAT IT ACTUALLY MOVED" Style="{StaticResource SectionCaption}"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                <TextBox Name="TextMeasured" Width="90" VerticalContentAlignment="Center"
+                         TextChanged="TextMeasured_TextChanged"/>
+                <TextBlock Text="mm" VerticalAlignment="Center" Margin="8,0"
+                           Foreground="{DynamicResource TextMutedBrush}"/>
+            </StackPanel>
+
+            <Border Background="{DynamicResource SurfaceRaisedBrush}" BorderBrush="{DynamicResource LineBrush}"
+                    BorderThickness="1" CornerRadius="{DynamicResource RadiusM}" Padding="14" Margin="0,8,0,0">
+                <StackPanel>
+                    <TextBlock Text="RESULT" Style="{StaticResource SectionCaption}"/>
+                    <TextBlock Name="LabelResult" Style="{StaticResource BannerBody}"
+                               Text="Fill in the measured distance to see the corrected value."/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Content="Cancel" Click="ButtonCancel_Click" MinWidth="90"/>
+            <Button Name="ButtonApply" Content="Use this value" Click="ButtonApply_Click"
+                    Style="{StaticResource PrimaryButton}" MinWidth="150" Margin="8,0,0,0" IsEnabled="False"/>
+        </StackPanel>
+    </Grid>
+</Window>

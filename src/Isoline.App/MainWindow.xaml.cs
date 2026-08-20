@@ -63,6 +63,8 @@ namespace Isoline
 			machine.Info += Machine_Info;
 			machine.LineReceived += Machine_LineReceived;
 			machine.LineReceived += settingsWindow.LineReceived;
+			machine.LineReceived += ControllerSettings.OnLineReceived;
+			ControllerSettings.Refreshed += ControllerSettings_Refreshed;
 			machine.StatusReceived += Machine_StatusReceived;
 			machine.LineSent += Machine_LineSent;
 

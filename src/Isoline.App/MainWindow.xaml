@@ -240,8 +240,12 @@
                                 <TextBox x:Name="TextBoxZSteps" Width="60" Background="{DynamicResource SurfaceSunkenBrush}" Foreground="White" BorderThickness="0" Padding="2" VerticalContentAlignment="Center"/>
                             </StackPanel>
 
-                            <Button Content="Read from GRBL" Click="ButtonReadCalibration_Click" Style="{StaticResource styleButton}" Height="25" Background="{DynamicResource AccentBrush}" Foreground="White" Margin="0,0,0,5"/>
-                            <Button Content="Save to GRBL" Click="ButtonSaveCalibration_Click" Style="{StaticResource styleButton}" Height="25" Background="{DynamicResource SuccessBrush}" Foreground="White" FontWeight="Bold"/>
+                            <Button Content="Read from controller" Click="ButtonReadCalibration_Click" Style="{StaticResource PrimaryButton}" Height="26" Margin="0,0,0,5"
+                                    ToolTip="Query the controller and fill these boxes in"/>
+                            <Button Content="Calibrate steps/mm..." Click="ButtonCalibrationWizard_Click" Style="{StaticResource styleButton}" Height="26" Margin="0,0,0,5"
+                                    ToolTip="Command a known move, measure it, and work out the correction"/>
+                            <Button Content="Save to controller" Click="ButtonSaveCalibration_Click" Style="{StaticResource SuccessButton}" Height="26" FontWeight="Bold"
+                                    ToolTip="Write these values to the controller's EEPROM"/>
                         </StackPanel>
                     </GroupBox>
                     
