@@ -1,3 +1,4 @@
+using Isoline.Expressions;
 using Isoline.Util;
 using System;
 using System.Collections.Generic;
@@ -206,7 +207,7 @@ namespace Isoline.GCode
 
 		public void FillWithTestPattern(string pattern)
 		{
-			martin2250.Calculator.Expression expr = martin2250.Calculator.Expression.Parse(pattern);
+			Expression expr = Expression.Parse(pattern);
 
 			for (int x = 0; x < SizeX; x++)
 			{

@@ -14,15 +14,7 @@
     <Description>G-code, height map and Gerber processing core for Isoline.</Description>
   </PropertyGroup>
 
-
-
   <ItemGroup>
-    <!--
-      Still the upstream expression library at this point. It only ships .NET Framework
-      binaries, so it restores through the compatibility shim and NuGet says so; replacing
-      it is the next commit.
-    -->
-    <PackageReference Include="martin2250.Calculator" Version="1.0.0" NoWarn="NU1701" />
   </ItemGroup>
 
   <ItemGroup>

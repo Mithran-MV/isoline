@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using Isoline.Communication;
+using Isoline.Expressions;
 
 namespace Isoline.Util
 {
@@ -10,8 +11,8 @@ namespace Isoline.Util
 	/// Substitutes parenthesised expressions in a manual command or macro with live machine
 	/// values, e.g. <c>G0 X(MX - 10)</c>.
 	/// <para>
-	/// The arithmetic itself is done by the martin2250.Calculator package; this class only
-	/// supplies the variables and stitches the result back into the line.
+	/// The arithmetic itself lives in <see cref="Expression"/> in Isoline.Core; this class
+	/// only supplies the variables and stitches the result back into the line.
 	/// </para>
 	/// </summary>
 	public class Calculator
@@ -86,7 +87,7 @@ namespace Isoline.Util
 		{
 			try
 			{
-				double value = martin2250.Calculator.Expression.Parse(input).GetValue(BuildVariables());
+				double value = Expression.Parse(input).GetValue(BuildVariables());
 
 				return value.ToString("0.###", Constants.DecimalOutputFormat);
 			}
