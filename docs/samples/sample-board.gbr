@@ -1,0 +1,33 @@
+G04 Isoline sample copper layer*
+G04 A two-pad footprint with a track between them and a ground pour with*
+G04 clearance around one pad. Enough to exercise flashes, tracks, regions*
+G04 and clear polarity. Units are millimetres, format 3.5.*
+%FSLAX35Y35*%
+%MOMM*%
+%ADD10C,1.60000*%
+G04 pad aperture*
+%ADD11C,0.30000*%
+G04 track aperture*
+%ADD12C,2.60000*%
+G04 clearance aperture*
+G04 ground pour first*
+G36*
+X-500000Y-500000D02*
+X1500000Y-500000D01*
+X1500000Y500000D01*
+X-500000Y500000D01*
+X-500000Y-500000D01*
+G37*
+G04 clear a keep-out ring around the left pad*
+%LPC*%
+D12*
+X0Y0D03*
+G04 back to drawing copper*
+%LPD*%
+D10*
+X0Y0D03*
+X1000000Y0D03*
+D11*
+X0Y0D02*
+X1000000Y0D01*
+M02*
