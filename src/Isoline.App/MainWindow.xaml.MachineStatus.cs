@@ -247,6 +247,7 @@ namespace Isoline
 
 			jobProgress.Update(machine.FilePosition);
 			UpdateJobProgress();
+			SaveRecoveryPoint();
 
 			if (ListViewFile.SelectedItem is TextBlock)
 			{

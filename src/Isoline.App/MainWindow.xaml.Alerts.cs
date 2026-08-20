@@ -56,6 +56,12 @@ namespace Isoline
 
 		private void ButtonAlertAction_Click(object sender, RoutedEventArgs e)
 		{
+			if (resumeArmed)
+			{
+				ResumePendingJob();
+				return;
+			}
+
 			// $X clears the alarm lock. Position is not trusted afterwards, which is what
 			// the banner text has just told the operator.
 			machine.SendLine("$X");

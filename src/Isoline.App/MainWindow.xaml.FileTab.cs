@@ -87,11 +87,15 @@ namespace Isoline
 			machine.ClearFile();
 			CurrentFileName = "";
 
+			jobProgress.Stop();
+			EndRecoveryTracking();
+			UpdateJobProgress();
 		}
 
 		private void ButtonFileStart_Click(object sender, RoutedEventArgs e)
 		{
 			jobProgress.Start(machine.File.Count, machine.FilePosition);
+			BeginRecoveryTracking();
 			UpdateJobProgress();
 
 			machine.FileStart();

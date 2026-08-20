@@ -40,6 +40,9 @@ namespace Isoline
 
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
+			// A job interrupted by an alarm or a pulled USB cable can be picked up again.
+			OfferRecovery();
+
 			if (!Properties.Settings.Default.FirstRunComplete)
 				ShowFirstRunSetup();
 		}
