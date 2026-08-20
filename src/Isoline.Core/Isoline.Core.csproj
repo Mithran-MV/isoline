@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Isoline.Core holds everything that does not need a screen: the G-code parser and
+    writer, height map maths, the Gerber front end and the isolation toolpath generator.
+    It targets plain net8.0 (not net8.0-windows) on purpose, so the interesting half of
+    the application builds and its tests run on Linux and macOS too.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Isoline</RootNamespace>
+    <AssemblyName>Isoline.Core</AssemblyName>
+    <Description>G-code, height map and Gerber processing core for Isoline.</Description>
+  </PropertyGroup>
+
+
+
+  <ItemGroup>
+    <!--
+      Still the upstream expression library at this point. It only ships .NET Framework
+      binaries, so it restores through the compatibility shim and NuGet says so; replacing
+      it is the next commit.
+    -->
+    <PackageReference Include="martin2250.Calculator" Version="1.0.0" NoWarn="NU1701" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Isoline.Core.Tests" />
+  </ItemGroup>
+
+</Project>

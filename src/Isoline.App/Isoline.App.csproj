@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The WPF shell. Everything that can live without a window lives in Isoline.Core, which
+    is why this project is thin for an application of this size.
+  -->
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Isoline</RootNamespace>
+    <AssemblyName>Isoline</AssemblyName>
+    <ApplicationIcon>Resources/Isoline.ico</ApplicationIcon>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <AssemblyTitle>Isoline</AssemblyTitle>
+    <Description>Height-mapped isolation milling and G-code sending for Grbl.</Description>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HelixToolkit.Wpf" Version="2.25.0" />
+    <PackageReference Include="System.IO.Ports" Version="8.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Isoline.Core/Isoline.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- firmware error/alarm/setting tables, read at runtime from the output directory -->
+    <None Update="Resources/*.csv" CopyToOutputDirectory="PreserveNewest" />
+    <Resource Include="Resources/Isoline.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties/Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <None Update="Properties/Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+</Project>
