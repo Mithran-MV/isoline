@@ -65,6 +65,20 @@ namespace Isoline
 		private void Window_Closed(object sender, EventArgs e)
 		{
 			Properties.Settings.Default.Save();
+
+			// Isoline.Core reads none of these directly; push the new values across.
+			App.ApplySettingsToCore();
+		}
+
+		/// <summary>Applies a theme change straight away, so the choice can be seen.</summary>
+		private void ComboTheme_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			string selected = ComboTheme.SelectedItem as string;
+
+			if (selected == null)
+				return;
+
+			Theme.ThemeManager.Apply(Theme.ThemeManager.Parse(selected));
 		}
 
         private void FirmwareType_SelectionChanged(object sender, SelectionChangedEventArgs e)

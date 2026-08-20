@@ -125,6 +125,8 @@
 
 						<ComboBox Grid.Row="10" x:Name="FirmwareType" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" SelectedItem="{util:SettingBinding FirmwareType}" SelectionChanged="FirmwareType_SelectionChanged">
 							<sys:String>Grbl</sys:String>
+							<sys:String>grblHAL</sys:String>
+							<sys:String>FluidNC</sys:String>
 							<sys:String>uCNC</sys:String>
 						</ComboBox>
 						<Label Grid.Row="10" Grid.Column="1" Content="Board firmware" VerticalAlignment="Center" Margin="0"/>
@@ -220,6 +222,52 @@
 					<CheckBox Content="Keep Spindle 'S' Commands" IsChecked="{util:SettingBinding GCodeIncludeSpindle}" ToolTip="Strip S[XX] from file before sending to machine if not checked" Margin="135,0,0,12"/>
 					<CheckBox Content="Keep Dwell 'G4' Commands" IsChecked="{util:SettingBinding GCodeIncludeDwell}" ToolTip="Strip G4 P[XX] from file before sending to machine if not checked" Margin="135,0,0,12"/>
 					<CheckBox Content="Keep Program End (M2, M30)" IsChecked="{util:SettingBinding GCodeIncludeMEnd}" ToolTip="Strip M2/M30 from file before sending to machine if not checked. Default is off since these commands reset offsets from G92." Margin="135,0,0,0"/>
+				</StackPanel>
+			</ScrollViewer>
+		</TabItem>
+
+		<TabItem Header="Appearance">
+			<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+				<StackPanel Margin="14,16,14,10" Orientation="Vertical">
+
+					<TextBlock Text="THEME" Style="{StaticResource SectionCaption}"/>
+					<ComboBox x:Name="ComboTheme" Width="160" HorizontalAlignment="Left"
+					          SelectedItem="{util:SettingBinding Theme}" SelectionChanged="ComboTheme_SelectionChanged"
+					          Margin="0,0,0,6">
+						<sys:String>Dark</sys:String>
+						<sys:String>Light</sys:String>
+						<sys:String>System</sys:String>
+					</ComboBox>
+					<TextBlock Text="System follows the Windows app-mode setting." Style="{StaticResource BannerBody}" Margin="0,0,0,18"/>
+
+					<TextBlock Text="HEIGHT MAP" Style="{StaticResource SectionCaption}"/>
+					<ComboBox x:Name="ComboInterpolation" Width="160" HorizontalAlignment="Left"
+					          SelectedItem="{util:SettingBinding HeightMapInterpolation}" Margin="0,0,0,6">
+						<sys:String>Bilinear</sys:String>
+						<sys:String>Bicubic</sys:String>
+					</ComboBox>
+					<TextBlock TextWrapping="Wrap" Style="{StaticResource BannerBody}" Margin="0,0,0,14"
+					           Text="Bilinear is what OpenCNCPilot did: fast, but the surface creases along every grid line. Bicubic is smooth through the probed points and follows real board curvature more closely."/>
+
+					<CheckBox Content="Discard obviously bad probe points" IsChecked="{util:SettingBinding ProbeRejectOutliers}" Margin="0,0,0,4"
+					          ToolTip="Replaces a probe reading that disagrees sharply with its neighbours"/>
+					<TextBlock TextWrapping="Wrap" Style="{StaticResource BannerBody}" Margin="0,0,0,8"
+					           Text="A single bad contact - swarf, a solder blob - otherwise drags a whole region of the compensated cut with it."/>
+
+					<StackPanel Orientation="Horizontal" Margin="0,0,0,18">
+						<TextBox Text="{util:SettingBinding ProbeOutlierThreshold}" Width="60"/>
+						<Label Content="Rejection threshold (sigma)" VerticalAlignment="Center"/>
+					</StackPanel>
+
+					<TextBlock Text="STREAMING" Style="{StaticResource SectionCaption}"/>
+					<CheckBox Content="Take the buffer size from the selected firmware" IsChecked="{util:SettingBinding AutoBufferSizeFromFirmware}" Margin="0,0,0,4"/>
+					<TextBlock TextWrapping="Wrap" Style="{StaticResource BannerBody}"
+					           Text="Grbl has a 127 byte receive buffer; grblHAL and FluidNC have far more. Assuming the smallest one everywhere is what makes jobs of very short segments stutter on 32 bit boards."/>
+
+					<CheckBox Content="Keep a recovery point while a job runs" IsChecked="{util:SettingBinding JobRecoveryEnabled}" Margin="0,14,0,4"/>
+					<TextBlock TextWrapping="Wrap" Style="{StaticResource BannerBody}"
+					           Text="Lets an interrupted job be resumed instead of restarted. Writes a small file next to the executable once a second while running."/>
+
 				</StackPanel>
 			</ScrollViewer>
 		</TabItem>
