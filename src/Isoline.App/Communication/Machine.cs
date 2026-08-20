@@ -20,7 +20,13 @@ namespace Isoline.Communication
 	public enum ConnectionType
 	{
 		Serial,
-		Ethernet
+		Ethernet,
+
+		/// <summary>
+		/// FluidNC exposes its console over a WebSocket rather than raw telnet; the frames
+		/// carry the same Grbl protocol, so only the transport differs.
+		/// </summary>
+		WebSocket,
 	}
 
 	public class Machine
@@ -253,7 +259,13 @@ namespace Isoline.Communication
 
 				int StatusPollInterval = Properties.Settings.Default.StatusPollInterval;
 
-				int ControllerBufferSize = Properties.Settings.Default.ControllerBufferSize;
+				// The controller's receive buffer decides how far ahead the sender may run.
+				// Assuming classic Grbl's 127 bytes everywhere throttles grblHAL and FluidNC
+				// needlessly, which is what makes a job of very short segments stutter on a
+				// 32 bit board.
+				int ControllerBufferSize = Properties.Settings.Default.AutoBufferSizeFromFirmware
+					? Isoline.Firmware.FirmwareProfile.ForName(Properties.Settings.Default.FirmwareType).BufferSize
+					: Properties.Settings.Default.ControllerBufferSize;
 				BufferState = 0;
 
 				TimeSpan WaitTime = TimeSpan.FromMilliseconds(0.5);
@@ -497,6 +509,28 @@ namespace Isoline.Communication
 					Connection = port.BaseStream;
 					Connected = true;
 					break;
+				case ConnectionType.WebSocket:
+					try
+					{
+						string url = $"ws://{Properties.Settings.Default.EthernetIP}:{Properties.Settings.Default.EthernetPort}/";
+
+						RaiseEvent(Info, "Connecting to " + url);
+
+						WebSocketConnection socket = new WebSocketConnection(url);
+						socket.Connect();
+
+						Connection = socket;
+						Connected = true;
+
+						RaiseEvent(Info, "Successful Connection");
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show("Could not open the WebSocket: " + ex.Message);
+					}
+
+					break;
+
 				case ConnectionType.Ethernet:
 					try
 					{
@@ -575,12 +609,20 @@ namespace Isoline.Communication
 					Connection.Dispose();
 					Connection = null;
 					break;
+				case ConnectionType.WebSocket:
 				case ConnectionType.Ethernet:
 					if (Connection != null)
 					{
 						Connection.Close();
-						ClientEthernet.Close();
+						Connection.Dispose();
 					}
+
+					if (ClientEthernet != null)
+					{
+						ClientEthernet.Close();
+						ClientEthernet = null;
+					}
+
 					Connection = null;
 					break;
 				default:
