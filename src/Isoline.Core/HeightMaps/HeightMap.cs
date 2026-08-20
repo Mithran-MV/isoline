@@ -36,14 +36,14 @@ namespace Isoline.GCode
 			if (min.X == max.X || min.Y == max.Y)
 				throw new Exception("Height map can't be infinitely narrow");
 
-			int pointsX = (int)Math.Ceiling((max.X - min.X) / gridSize) + 1;
-			int pointsY = (int)Math.Ceiling((max.Y - min.Y) / gridSize) + 1;
+			if (gridSize <= 0)
+				throw new Exception("Grid size must be positive");
 
-			if (pointsX < 2 || pointsY < 2)
-				throw new Exception("Height map must have at least 4 points");
-
-			Points = new double?[pointsX, pointsY];
-
+			// Normalise the corners *before* sizing the grid. Upstream swapped them after
+			// computing the point counts, so a map defined from its top-right corner to its
+			// bottom-left produced a negative count and failed with "must have at least 4
+			// points" - which is exactly how someone probing a toolpath that runs in the
+			// negative direction would naturally enter it.
 			if (max.X < min.X)
 			{
 				double a = min.X;
@@ -57,6 +57,14 @@ namespace Isoline.GCode
 				min.Y = max.Y;
 				max.Y = a;
 			}
+
+			int pointsX = (int)Math.Ceiling((max.X - min.X) / gridSize) + 1;
+			int pointsY = (int)Math.Ceiling((max.Y - min.Y) / gridSize) + 1;
+
+			if (pointsX < 2 || pointsY < 2)
+				throw new Exception("Height map must have at least 4 points");
+
+			Points = new double?[pointsX, pointsY];
 
 			Min = min;
 			Max = max;
