@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Test the core
+        run: dotnet test tests/Isoline.Core.Tests/Isoline.Core.Tests.csproj -c Release
+
+      - name: Publish framework dependent build
+        run: dotnet publish src/Isoline.App/Isoline.App.csproj -c Release -r win-x64 --self-contained false -o artifacts/isoline
+
+      - name: Publish self contained build
+        run: dotnet publish src/Isoline.App/Isoline.App.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=false -o artifacts/isoline-standalone
+
+      - name: Package
+        shell: pwsh
+        run: |
+          Compress-Archive -Path artifacts/isoline/*            -DestinationPath isoline-${{ github.ref_name }}-win-x64.zip
+          Compress-Archive -Path artifacts/isoline-standalone/* -DestinationPath isoline-${{ github.ref_name }}-win-x64-standalone.zip
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            isoline-*.zip
+          generate_release_notes: true
