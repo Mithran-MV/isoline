@@ -1,0 +1,37 @@
+Isoline
+=======
+
+Isoline is a fork of OpenCNCPilot by Martin Pittermann (martin2250),
+https://github.com/martin2250/OpenCNCPilot, used under the MIT License.
+The original copyright notice is preserved in LICENSE, and the upstream commit
+history is preserved in this repository's git history.
+
+What Isoline changes
+--------------------
+
+* Split into Isoline.Core (platform independent G-code, height map, Gerber and
+  toolpath code) and Isoline.App (the WPF shell), with a unit test suite.
+* Migrated from .NET Framework 4.6 to .NET 8.
+* Reads Gerber files and generates isolation toolpaths directly, removing the
+  round trip through external CAM software.
+* Rebuilt user interface: token based theming, always-visible digital readout,
+  keyboard jogging, decoded alarms, job progress and time estimation.
+* Bicubic height map interpolation and probe outlier rejection.
+* Job recovery after an alarm or lost connection.
+* Machine calibration (steps/mm) read/write and a measurement wizard.
+* Support for grblHAL and FluidNC alongside Grbl and uCNC.
+
+Third party components
+----------------------
+
+Clipper2                 Boost Software License 1.0   https://github.com/AngusJohnson/Clipper2
+HelixToolkit.Wpf         MIT License                  https://github.com/helix-toolkit/helix-toolkit
+System.IO.Ports          MIT License                  https://github.com/dotnet/runtime
+xUnit.net                Apache License 2.0           https://github.com/xunit/xunit
+
+The Grbl and uCNC error, alarm and setting code tables in
+src/Isoline.App/Resources are derived from the Grbl and uCNC projects.
+
+The expression evaluator in src/Isoline.Core/Expressions replaces the
+martin2250.Calculator package that upstream depended on; it is an original
+implementation written for this fork so that the core could target .NET 8.
