@@ -282,6 +282,26 @@ namespace Isoline.GCode
 				+ (-p0 + 3 * p1 - 3 * p2 + p3) * t3);
 		}
 
+		/// <summary>
+		/// Every probed height in the map, row-major. Un-probed cells are skipped.
+		/// </summary>
+		public IEnumerable<double> ProbedHeights()
+		{
+			for (int x = 0; x < SizeX; x++)
+				for (int y = 0; y < SizeY; y++)
+					if (Points[x, y].HasValue)
+						yield return Points[x, y].Value;
+		}
+
+		/// <summary>
+		/// Summary statistics over the probed points, used by the UI to report how warped
+		/// the stock actually is and to flag maps that look like a bad probe run.
+		/// </summary>
+		public HeightMapStatistics GetStatistics()
+		{
+			return HeightMapStatistics.FromHeights(ProbedHeights());
+		}
+
 		public void FillWithTestPattern(string pattern)
 		{
 			Expression expr = Expression.Parse(pattern);

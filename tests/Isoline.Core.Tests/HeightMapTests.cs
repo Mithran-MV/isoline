@@ -122,6 +122,19 @@ namespace Isoline.Tests
 			Assert.Equal(1, map.InterpolateZ(10, 10), 9);
 		}
 
+		[Fact]
+		public void StatisticsDescribeTheProbedSurface()
+		{
+			HeightMap map = Probed((x, y) => x < 5 ? 0 : 1, 2.5);
+
+			HeightMapStatistics stats = map.GetStatistics();
+
+			Assert.Equal(25, stats.Count);
+			Assert.Equal(0, stats.Min, 9);
+			Assert.Equal(1, stats.Max, 9);
+			Assert.Equal(1, stats.Range, 9);
+			Assert.True(stats.StandardDeviation > 0);
+		}
 
 
 
