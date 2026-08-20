@@ -302,6 +302,47 @@ namespace Isoline.GCode
 			return HeightMapStatistics.FromHeights(ProbedHeights());
 		}
 
+		/// <summary>
+		/// Discards probe points that sit more than <paramref name="threshold"/> median absolute
+		/// deviations away from the local median, then re-fills them from their neighbours.
+		/// A single bad contact (chip under the probe, dirty pad) otherwise drags a whole
+		/// region of the compensated toolpath with it.
+		/// </summary>
+		/// <returns>The number of points that were replaced.</returns>
+		public int RejectOutliers(double threshold = 3.5)
+		{
+			return OutlierFilter.Apply(this, threshold);
+		}
+
+		/// <summary>
+		/// Replaces the height at a grid index without raising <see cref="MapUpdated"/> for
+		/// every single point; used by bulk operations such as outlier rejection.
+		/// </summary>
+		internal void SetPointQuiet(int x, int y, double height)
+		{
+			Points[x, y] = height;
+		}
+
+		/// <summary>
+		/// Recomputes <see cref="MinHeight"/>/<see cref="MaxHeight"/> after a bulk edit.
+		/// </summary>
+		internal void RecalculateBounds()
+		{
+			MinHeight = double.MaxValue;
+			MaxHeight = double.MinValue;
+
+			foreach (double h in ProbedHeights())
+			{
+				if (h > MaxHeight)
+					MaxHeight = h;
+				if (h < MinHeight)
+					MinHeight = h;
+			}
+
+			if (MapUpdated != null)
+				MapUpdated();
+		}
+
 		public void FillWithTestPattern(string pattern)
 		{
 			Expression expr = Expression.Parse(pattern);

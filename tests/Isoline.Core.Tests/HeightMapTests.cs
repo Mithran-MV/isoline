@@ -136,7 +136,29 @@ namespace Isoline.Tests
 			Assert.True(stats.StandardDeviation > 0);
 		}
 
+		[Fact]
+		public void OutlierRejectionReplacesASingleBadProbe()
+		{
+			HeightMap map = Probed((x, y) => 0.0, 1.0);   // a perfectly flat board
 
+			map.AddPoint(4, 4, -3.0);                     // one probe that hit a chip
+
+			int replaced = map.RejectOutliers();
+
+			Assert.Equal(1, replaced);
+			Assert.Equal(0, map.Points[4, 4].Value, 9);
+			Assert.Equal(0, map.MinHeight, 9);            // bounds recomputed after the fix
+		}
+
+		[Fact]
+		public void OutlierRejectionLeavesRealCurvatureAlone()
+		{
+			// a genuinely warped board must survive untouched - the filter is there to catch
+			// bad contacts, not to flatten the very warpage the map exists to record
+			HeightMap map = Probed((x, y) => 0.05 * x + 0.02 * y, 1.0);
+
+			Assert.Equal(0, map.RejectOutliers());
+		}
 
 		[Fact]
 		public void SaveAndLoadRoundTrips()
