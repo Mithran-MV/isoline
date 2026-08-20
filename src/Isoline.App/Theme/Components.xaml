@@ -1,0 +1,161 @@
+<!--
+  Styles for the parts of the interface that are specific to running a machine: the state
+  pill, the alarm banner, the digital readout and the console.
+-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--
+      Machine state pill. The colour is driven from code (StatusPresentation) rather than
+      from a trigger per state, because the set of states differs between firmwares.
+    -->
+    <Style x:Key="StatePill" TargetType="Border">
+        <Setter Property="CornerRadius" Value="{DynamicResource RadiusPill}"/>
+        <Setter Property="Padding" Value="12,4"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="StatePillText" TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeS}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource UiFont}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <!--
+      The banner that carries a decoded alarm or error. It sits above everything else and
+      stays until it is dismissed: an alarm that scrolls out of the console unread is how
+      an operator ends up wondering why the machine stopped responding.
+    -->
+    <Style x:Key="Banner" TargetType="Border">
+        <Setter Property="CornerRadius" Value="{DynamicResource RadiusM}"/>
+        <Setter Property="Padding" Value="14,10"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Margin" Value="12,10,12,0"/>
+    </Style>
+
+    <Style x:Key="BannerTitle" TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeM}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource UiFont}"/>
+        <Setter Property="Margin" Value="0,0,0,2"/>
+    </Style>
+
+    <Style x:Key="BannerBody" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeS}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource UiFont}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+
+    <!--
+      Digital readout. Tabular monospaced digits so the numbers do not jitter sideways
+      while the machine is moving.
+    -->
+    <Style x:Key="ReadoutValue" TargetType="TextBox">
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="TextAlignment" Value="Right"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FontFamily" Value="{DynamicResource NumericFont}"/>
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeReadout}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Cursor" Value="IBeam"/>
+        <Setter Property="ToolTip" Value="Work coordinate. Select to copy."/>
+    </Style>
+
+    <Style x:Key="ReadoutSecondary" TargetType="TextBox" BasedOn="{StaticResource ReadoutValue}">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeReadoutSmall}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextSubtleBrush}"/>
+        <Setter Property="VerticalAlignment" Value="Bottom"/>
+        <Setter Property="ToolTip" Value="Machine coordinate"/>
+    </Style>
+
+    <Style x:Key="ReadoutAxisLabel" TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="Black"/>
+        <Setter Property="FontSize" Value="26"/>
+        <Setter Property="FontFamily" Value="{DynamicResource NumericFont}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="SectionCaption" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeXs}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontFamily" Value="{DynamicResource UiFont}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextSubtleBrush}"/>
+        <Setter Property="Margin" Value="{DynamicResource StackGapS}"/>
+    </Style>
+
+    <!-- primary / danger button variants, so intent is not spelled out in inline hex -->
+    <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource styleButton}">
+        <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
+    </Style>
+
+    <Style x:Key="SuccessButton" TargetType="Button" BasedOn="{StaticResource styleButton}">
+        <Setter Property="Background" Value="{DynamicResource SuccessBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource SuccessBrush}"/>
+    </Style>
+
+    <Style x:Key="WarningButton" TargetType="Button" BasedOn="{StaticResource styleButton}">
+        <Setter Property="Background" Value="{DynamicResource WarningBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource WarningBrush}"/>
+    </Style>
+
+    <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource styleButton}">
+        <Setter Property="Background" Value="{DynamicResource DangerBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource DangerBrush}"/>
+    </Style>
+
+    <!--
+      The three machine controls that must never be hunted for. Sized well above the rest
+      of the toolbar so they can be hit without looking away from the cutter.
+    -->
+    <Style x:Key="MachineControlButton" TargetType="Button" BasedOn="{StaticResource styleButton}">
+        <Setter Property="Height" Value="42"/>
+        <Setter Property="MinWidth" Value="104"/>
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeXl}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}"/>
+        <Setter Property="Margin" Value="4,0"/>
+    </Style>
+
+    <Style x:Key="ConsoleText" TargetType="TextBox">
+        <Setter Property="FontFamily" Value="{DynamicResource NumericFont}"/>
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeS}"/>
+        <Setter Property="Background" Value="{DynamicResource SurfaceSunkenBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
+    </Style>
+
+    <!-- progress bar used for job progress in the toolbar -->
+    <Style x:Key="JobProgress" TargetType="ProgressBar">
+        <Setter Property="Height" Value="6"/>
+        <Setter Property="Foreground" Value="{DynamicResource AccentBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource SurfaceSunkenBrush}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ProgressBar">
+                    <Border CornerRadius="{DynamicResource RadiusPill}" Background="{TemplateBinding Background}" ClipToBounds="True">
+                        <Grid>
+                            <Rectangle Name="PART_Track"/>
+                            <Rectangle Name="PART_Indicator" HorizontalAlignment="Left" Fill="{TemplateBinding Foreground}"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

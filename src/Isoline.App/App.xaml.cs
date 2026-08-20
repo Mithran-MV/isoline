@@ -1,4 +1,4 @@
-﻿using Isoline.Properties;
+using Isoline.Properties;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -77,6 +77,40 @@ namespace Isoline
 				Settings.Default.SettingsUpdateRequired = false;
 				Settings.Default.Save();
 			}
+
+			ApplySettingsToCore();
+
+			Theme.ThemeManager.Apply(Theme.ThemeManager.Parse(Settings.Default.Theme));
+		}
+
+		/// <summary>
+		/// Pushes the user's settings into Isoline.Core.
+		/// <para>
+		/// Core deliberately knows nothing about the application settings object - that is
+		/// what makes it testable - so the application hands it the handful of values it
+		/// needs at start-up, and again whenever the user changes one.
+		/// </para>
+		/// </summary>
+		public static void ApplySettingsToCore()
+		{
+			GCode.GCodeOutputOptions.Current = new GCode.GCodeOutputOptions()
+			{
+				IncludeProgramEnd = Settings.Default.GCodeIncludeMEnd,
+				IncludeSpindle = Settings.Default.GCodeIncludeSpindle,
+				IncludeDwell = Settings.Default.GCodeIncludeDwell,
+			};
+
+			GCode.GCodeParserOptions.Current = new GCode.GCodeParserOptions()
+			{
+				IgnoreAdditionalAxes = Settings.Default.IgnoreAdditionalAxes,
+			};
+
+			Visuals.ToolpathVisuals.ViewportArcSplit = Settings.Default.ViewportArcSplit;
+
+			// the firmware code tables live next to the executable
+			Firmware.GrblCodeTranslator.ResourceDirectory =
+				System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
+			Firmware.GrblCodeTranslator.Reload(Settings.Default.FirmwareType);
 		}
 	}
 }

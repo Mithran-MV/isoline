@@ -3,11 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Isoline"
              StartupUri="MainWindow.xaml" Startup="Application_Startup">
-	<Application.Resources>
+    <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="ModernTheme.xaml"/>
+                <!--
+                  Order matters: the colour tokens go first so that everything after them
+                  can reference (and, in principle, override) them. ThemeManager swaps
+                  this entry at runtime to change theme.
+                -->
+                <ResourceDictionary Source="Theme/Tokens.Dark.xaml"/>
+                <ResourceDictionary Source="Theme/Metrics.xaml"/>
+                <ResourceDictionary Source="Theme/Controls.xaml"/>
+                <ResourceDictionary Source="Theme/Components.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-	</Application.Resources>
+    </Application.Resources>
 </Application>

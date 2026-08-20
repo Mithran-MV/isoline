@@ -1,0 +1,45 @@
+<!--
+  Spacing, radius and type scale. Hand-typed margins like "0,0,0,15" were what made the
+  old layout drift; every gap now comes from this ladder instead.
+-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- spacing ladder: 4 / 8 / 12 / 16 / 24 -->
+    <Thickness x:Key="SpaceXs">4</Thickness>
+    <Thickness x:Key="SpaceS">8</Thickness>
+    <Thickness x:Key="SpaceM">12</Thickness>
+    <Thickness x:Key="SpaceL">16</Thickness>
+
+    <Thickness x:Key="StackGapS">0,0,0,8</Thickness>
+    <Thickness x:Key="StackGapM">0,0,0,12</Thickness>
+    <Thickness x:Key="StackGapL">0,0,0,16</Thickness>
+
+    <Thickness x:Key="PanelPadding">12</Thickness>
+    <Thickness x:Key="ControlPadding">10,6</Thickness>
+
+    <CornerRadius x:Key="RadiusS">4</CornerRadius>
+    <CornerRadius x:Key="RadiusM">6</CornerRadius>
+    <CornerRadius x:Key="RadiusL">10</CornerRadius>
+    <CornerRadius x:Key="RadiusPill">999</CornerRadius>
+
+    <!-- type scale -->
+    <sys:Double x:Key="FontSizeXs">11</sys:Double>
+    <sys:Double x:Key="FontSizeS">12</sys:Double>
+    <sys:Double x:Key="FontSizeM">13</sys:Double>
+    <sys:Double x:Key="FontSizeL">15</sys:Double>
+    <sys:Double x:Key="FontSizeXl">18</sys:Double>
+    <sys:Double x:Key="FontSizeReadout">30</sys:Double>
+    <sys:Double x:Key="FontSizeReadoutSmall">12</sys:Double>
+
+    <FontFamily x:Key="UiFont">Segoe UI Variable Text, Segoe UI, Inter, Arial</FontFamily>
+
+    <!--
+      The readout, the console and anything else showing numbers that change in place uses
+      a monospaced face, so digits keep their column instead of jittering sideways as the
+      machine moves.
+    -->
+    <FontFamily x:Key="NumericFont">Cascadia Mono, Consolas, Menlo, Courier New</FontFamily>
+
+</ResourceDictionary>

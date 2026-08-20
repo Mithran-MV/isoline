@@ -1,0 +1,85 @@
+<!--
+  Light palette. This file defines *only* colour tokens - no templates, no layout - and
+  Tokens.Light.xaml defines exactly the same keys with different values. Swapping the two
+  dictionaries at runtime is therefore the whole of theme switching.
+
+  Every brush is named for its role (Surface, TextMuted, Danger) rather than its colour, so
+  a control never has to know whether it is currently sitting on a light or a dark ground.
+-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- surfaces, from furthest back to closest -->
+    <Color x:Key="SurfaceColor">#F5F6F8</Color>
+    <Color x:Key="SurfaceRaisedColor">#FFFFFF</Color>
+    <Color x:Key="SurfaceOverlayColor">#ECEEF2</Color>
+    <Color x:Key="SurfaceSunkenColor">#E4E7EC</Color>
+    <Color x:Key="BorderColor">#D3D8E0</Color>
+    <Color x:Key="BorderStrongColor">#B4BCC7</Color>
+
+    <!-- text -->
+    <Color x:Key="TextColor">#15181D</Color>
+    <Color x:Key="TextMutedColor">#525A66</Color>
+    <Color x:Key="TextSubtleColor">#767D89</Color>
+    <Color x:Key="TextOnAccentColor">#FFFFFF</Color>
+
+    <!--
+      Accent: the fill is the saturated blue, but the *text* variant is lighter.
+      #2563EB on this background is about 3.6:1, which fails WCAG AA for text; #60A5FA
+      clears 6:1. Fills only have to meet 3:1, so they can keep the stronger colour.
+    -->
+    <Color x:Key="AccentColor">#2563EB</Color>
+    <Color x:Key="AccentHoverColor">#1D4ED8</Color>
+    <Color x:Key="AccentPressedColor">#1E40AF</Color>
+    <Color x:Key="AccentTextColor">#1D4ED8</Color>
+
+    <Color x:Key="SuccessColor">#059669</Color>
+    <Color x:Key="SuccessTextColor">#047857</Color>
+    <Color x:Key="WarningColor">#D97706</Color>
+    <Color x:Key="WarningTextColor">#B45309</Color>
+    <Color x:Key="DangerColor">#DC2626</Color>
+    <Color x:Key="DangerTextColor">#B91C1C</Color>
+
+    <!-- axis identity, shared by the readout, the jog pad and the viewport -->
+    <Color x:Key="AxisXColor">#D64545</Color>
+    <Color x:Key="AxisYColor">#2F9E44</Color>
+    <Color x:Key="AxisZColor">#1C7ED6</Color>
+
+    <!-- toolpath -->
+    <Color x:Key="ToolpathCutColor">#15181D</Color>
+    <Color x:Key="ToolpathRapidColor">#98A2B3</Color>
+    <Color x:Key="ToolpathArcColor">#1D4ED8</Color>
+
+    <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}"/>
+    <SolidColorBrush x:Key="SurfaceRaisedBrush" Color="{StaticResource SurfaceRaisedColor}"/>
+    <SolidColorBrush x:Key="SurfaceOverlayBrush" Color="{StaticResource SurfaceOverlayColor}"/>
+    <SolidColorBrush x:Key="SurfaceSunkenBrush" Color="{StaticResource SurfaceSunkenColor}"/>
+    <SolidColorBrush x:Key="LineBrush" Color="{StaticResource BorderColor}"/>
+    <SolidColorBrush x:Key="LineStrongBrush" Color="{StaticResource BorderStrongColor}"/>
+
+    <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextColor}"/>
+    <SolidColorBrush x:Key="TextMutedBrush" Color="{StaticResource TextMutedColor}"/>
+    <SolidColorBrush x:Key="TextSubtleBrush" Color="{StaticResource TextSubtleColor}"/>
+    <SolidColorBrush x:Key="TextOnAccentBrush" Color="{StaticResource TextOnAccentColor}"/>
+
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}"/>
+    <SolidColorBrush x:Key="AccentHoverBrush" Color="{StaticResource AccentHoverColor}"/>
+    <SolidColorBrush x:Key="AccentPressedBrush" Color="{StaticResource AccentPressedColor}"/>
+    <SolidColorBrush x:Key="AccentTextBrush" Color="{StaticResource AccentTextColor}"/>
+
+    <SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource SuccessColor}"/>
+    <SolidColorBrush x:Key="SuccessTextBrush" Color="{StaticResource SuccessTextColor}"/>
+    <SolidColorBrush x:Key="WarningBrush" Color="{StaticResource WarningColor}"/>
+    <SolidColorBrush x:Key="WarningTextBrush" Color="{StaticResource WarningTextColor}"/>
+    <SolidColorBrush x:Key="DangerBrush" Color="{StaticResource DangerColor}"/>
+    <SolidColorBrush x:Key="DangerTextBrush" Color="{StaticResource DangerTextColor}"/>
+
+    <SolidColorBrush x:Key="AxisXBrush" Color="{StaticResource AxisXColor}"/>
+    <SolidColorBrush x:Key="AxisYBrush" Color="{StaticResource AxisYColor}"/>
+    <SolidColorBrush x:Key="AxisZBrush" Color="{StaticResource AxisZColor}"/>
+
+    <SolidColorBrush x:Key="ToolpathCutBrush" Color="{StaticResource ToolpathCutColor}"/>
+    <SolidColorBrush x:Key="ToolpathRapidBrush" Color="{StaticResource ToolpathRapidColor}"/>
+    <SolidColorBrush x:Key="ToolpathArcBrush" Color="{StaticResource ToolpathArcColor}"/>
+
+</ResourceDictionary>
