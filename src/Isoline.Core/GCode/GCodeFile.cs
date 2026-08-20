@@ -115,21 +115,24 @@ namespace Isoline.GCode
 
 		public static GCodeFile Load(string path)
 		{
-			GCodeParser.Reset();
-			GCodeParser.ParseFile(path);
+			ParseResult parsed = GCodeParser.ParseAllFromFile(path);
 
-			GCodeFile gcodeFile = new GCodeFile(GCodeParser.Commands) { FileName = path.Substring(path.LastIndexOf('\\') + 1) };
-			gcodeFile.Warnings.InsertRange(0, GCodeParser.Warnings);
+			GCodeFile gcodeFile = new GCodeFile(parsed.Commands)
+			{
+				FileName = System.IO.Path.GetFileName(path),
+			};
+
+			gcodeFile.Warnings.InsertRange(0, parsed.Warnings);
 			return gcodeFile;
 		}
 
 		public static GCodeFile FromList(IEnumerable<string> file)
 		{
-			GCodeParser.Reset();
-			GCodeParser.Parse(file);
+			ParseResult parsed = GCodeParser.ParseAll(file);
 
-			GCodeFile gcodeFile = new GCodeFile(GCodeParser.Commands) { FileName = "output.nc" };
-			gcodeFile.Warnings.InsertRange(0, GCodeParser.Warnings);
+			GCodeFile gcodeFile = new GCodeFile(parsed.Commands) { FileName = "output.nc" };
+
+			gcodeFile.Warnings.InsertRange(0, parsed.Warnings);
 			return gcodeFile;
 		}
 

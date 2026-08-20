@@ -57,20 +57,62 @@ namespace Isoline.GCode
 
 	public static class GCodeParser
 	{
-		public static ParserState State;
+		public static ParserState State { get; set; }
 
-		public static Regex GCodeSplitter = new Regex(@"([A-Z])\s*(\-?\d+\.?\d*)", RegexOptions.Compiled);
+		public static readonly Regex GCodeSplitter = new Regex(@"([A-Z])\s*(\-?\d+\.?\d*)", RegexOptions.Compiled);
 		private static double[] MotionCommands = new double[] { 0, 1, 2, 3 };
 		private static string ValidWords = "GMXYZIJKFRSP";
 		private static string IgnoreAxes = "ABC";
-		public static List<Command> Commands;
-		public static List<string> Warnings;
+		public static List<Command> Commands { get; private set; }
+		public static List<string> Warnings { get; private set; }
 
 		public static void Reset()
 		{
 			State = new ParserState();
 			Commands = new List<Command>(); //don't reuse, might be used elsewhere
 			Warnings = new List<string>();
+		}
+
+		/// <summary>
+		/// Serialises access to the parser's static state.
+		/// <para>
+		/// Modal state, the command list and the warning list are all static, which was fine
+		/// while only the UI thread ever parsed anything. It is not fine now: the machine's
+		/// worker thread parses a file while the interface may be parsing another, and the
+		/// two interleave into one command list. It showed up as an intermittently failing
+		/// height map test - two parses in flight, one of them getting the other's toolpath.
+		/// </para>
+		/// </summary>
+		private static readonly object SyncRoot = new object();
+
+		/// <summary>
+		/// Parses a whole file and hands back its own command and warning lists.
+		/// This is the entry point callers should use; the static <see cref="Commands"/> and
+		/// <see cref="Warnings"/> are only safe to read while holding the same lock.
+		/// </summary>
+		public static ParseResult ParseAll(IEnumerable<string> file)
+		{
+			lock (SyncRoot)
+			{
+				Reset();
+				Parse(file);
+
+				// Reset allocated fresh lists, so handing these out transfers ownership and
+				// the next parse cannot mutate them.
+				return new ParseResult(Commands, Warnings);
+			}
+		}
+
+		/// <summary>Parses a file from disk. See <see cref="ParseAll"/>.</summary>
+		public static ParseResult ParseAllFromFile(string path)
+		{
+			lock (SyncRoot)
+			{
+				Reset();
+				ParseFile(path);
+
+				return new ParseResult(Commands, Warnings);
+			}
 		}
 
 		static GCodeParser()

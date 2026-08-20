@@ -50,3 +50,9 @@ First release of Isoline, forked from OpenCNCPilot 1.5.13.
 - The parser warned about `G94`, which nearly every real file contains.
 - The status label was painted black on a dark background when the machine was idle.
 - Disconnecting an Ethernet connection did not dispose the stream.
+- The G-code parser kept its modal state, command list and warning list in static fields.
+  Two parses running at once - the sender's worker thread and the interface - interleaved
+  into a single command list, which surfaced as a toolpath that had apparently not been
+  height-compensated at all. Parsing now returns its own result under a lock, and a
+  regression test parses eight programs in parallel and checks none of them sees another's
+  moves.
