@@ -12,7 +12,7 @@
 		DragEnter="Window_DragEnter"
 		DataContext="{Binding RelativeSource={RelativeSource Self}}"
 		PreviewKeyDown="Window_PreviewKeyDown"
-		Icon="VL_PCB_Logo.png"
+		Icon="Resources/Isoline.png"
 		Title="{Binding WindowTitle,Mode=OneWay}" Height="{util:SettingBinding WindowHeight}" Width="{util:SettingBinding WindowWidth}" Closing="Window_Closing">
     <Window.Resources>
         <ResourceDictionary Source="MainWindow.Resources.xaml"/>
@@ -20,32 +20,32 @@
 
     <DockPanel>
         <!-- TOP NAVBAR -->
-        <Border DockPanel.Dock="Top" Background="#1E1E24" Padding="10" BorderBrush="#2D2D35" BorderThickness="0,0,0,1">
+        <Border DockPanel.Dock="Top" Background="{DynamicResource SurfaceRaisedBrush}" Padding="10" BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,0,0,1">
             <Grid>
                 <!-- Left: Connection & States -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <!-- Machine connection -->
-                    <Button Name="ButtonConnect" Content="Connect" Style="{StaticResource styleButton}" Click="ButtonConnect_Click" Background="#3B82F6" Foreground="White" FontWeight="Bold" Margin="0,0,10,0"/>
-                    <Button Name="ButtonDisconnect" Visibility="Collapsed" Content="Disconnect" Style="{StaticResource styleButton}" Click="ButtonDisconnect_Click" Background="#EF4444" Foreground="White" FontWeight="Bold" Margin="0,0,10,0"/>
+                    <Button Name="ButtonConnect" Content="Connect" Style="{StaticResource styleButton}" Click="ButtonConnect_Click" Background="{DynamicResource AccentBrush}" Foreground="White" FontWeight="Bold" Margin="0,0,10,0"/>
+                    <Button Name="ButtonDisconnect" Visibility="Collapsed" Content="Disconnect" Style="{StaticResource styleButton}" Click="ButtonDisconnect_Click" Background="{DynamicResource DangerBrush}" Foreground="White" FontWeight="Bold" Margin="0,0,10,0"/>
                     <Button Name="ButtonSettings" Content="Settings" Style="{StaticResource styleButton}" Click="ButtonSettings_Click" Margin="0,0,10,0"/>
                     <Button Content="GRBL Settings" Style="{StaticResource styleButton}" Click="ShowGrblSettings_Click" Name="ButtonGrblSettings" Margin="0,0,20,0"/>
                     
-                    <Border Background="#2D2D35" CornerRadius="4" Padding="5,0" Margin="0,0,10,0">
-                         <Button Name="ButtonStatus" Content="Disconnected" Click="ButtonStatus_Click" Style="{StaticResource styleButton}" Background="Transparent" Foreground="#F59E0B" FontWeight="Bold" ToolTip="Machine Status - Click to send $X to unlock" BorderThickness="0"/>
+                    <Border Background="{DynamicResource SurfaceOverlayBrush}" CornerRadius="4" Padding="5,0" Margin="0,0,10,0">
+                         <Button Name="ButtonStatus" Content="Disconnected" Click="ButtonStatus_Click" Style="{StaticResource styleButton}" Background="Transparent" Foreground="{DynamicResource WarningTextBrush}" FontWeight="Bold" ToolTip="Machine Status - Click to send $X to unlock" BorderThickness="0"/>
                     </Border>
                 </StackPanel>
                 
                 <!-- Center: Global Actions -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Name="ButtonCycleStart" Click="ButtonCycleStart_Click" Content="START" Style="{StaticResource styleButton}" Background="#10B981" Foreground="White" FontWeight="Bold" FontSize="16" Width="100" Height="40" Margin="5,0"/>
-                    <Button Name="ButtonFeedHold" Click="ButtonFeedHold_Click" Content="HOLD" Style="{StaticResource styleButton}" Background="#F59E0B" Foreground="White" FontWeight="Bold" FontSize="16" Width="100" Height="40" Margin="5,0"/>
-                    <Button Name="ButtonSoftReset" Click="ButtonSoftReset_Click" Content="RESET" Style="{StaticResource styleButton}" Background="#EF4444" Foreground="White" FontWeight="Bold" FontSize="16" Width="100" Height="40" Margin="5,0"/>
+                    <Button Name="ButtonCycleStart" Click="ButtonCycleStart_Click" Content="START" Style="{StaticResource styleButton}" Background="{DynamicResource SuccessBrush}" Foreground="White" FontWeight="Bold" FontSize="16" Width="100" Height="40" Margin="5,0"/>
+                    <Button Name="ButtonFeedHold" Click="ButtonFeedHold_Click" Content="HOLD" Style="{StaticResource styleButton}" Background="{DynamicResource WarningBrush}" Foreground="White" FontWeight="Bold" FontSize="16" Width="100" Height="40" Margin="5,0"/>
+                    <Button Name="ButtonSoftReset" Click="ButtonSoftReset_Click" Content="RESET" Style="{StaticResource styleButton}" Background="{DynamicResource DangerBrush}" Foreground="White" FontWeight="Bold" FontSize="16" Width="100" Height="40" Margin="5,0"/>
                 </StackPanel>
 
                 <!-- Right: Homing & Units -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <StackPanel Margin="0,0,20,0">
-                        <Button Name="ButtonMachineHome" Content="Home Machine" Style="{StaticResource styleButton}" Click="ButtonMachineHome_Click" Background="#6366F1" Foreground="White" FontWeight="Bold" Margin="0,0,0,5"/>
+                        <Button Name="ButtonMachineHome" Content="Home Machine" Style="{StaticResource styleButton}" Click="ButtonMachineHome_Click" Background="{DynamicResource AccentBrush}" Foreground="White" FontWeight="Bold" Margin="0,0,0,5"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Button Content="Inv Y Homing" ToolTip="Inverts Y axis homing direction ($23=2)" Click="ButtonInvertYHoming_Click" Style="{StaticResource styleButton}" FontSize="10" Margin="0,0,2,0" Padding="5,2"/>
                             <Button Content="Rst Y Homing" ToolTip="Resets Y axis homing direction ($23=0)" Click="ButtonResetYHoming_Click" Style="{StaticResource styleButton}" FontSize="10" Padding="5,2"/>
@@ -59,7 +59,7 @@
         </Border>
 
         <!-- LEFT SIDEBAR -->
-        <Border DockPanel.Dock="Left" Width="280" Background="#1A1A1D" BorderBrush="#2D2D35" BorderThickness="0,0,1,0">
+        <Border DockPanel.Dock="Left" Width="280" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,0,1,0">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel Margin="10">
                     <!-- FILE PANEL -->
@@ -75,17 +75,17 @@
                                 <Button Name="ButtonFileSave" Click="ButtonSave_Click" Content="Save" Style="{StaticResource styleButton}" Grid.Column="1" Margin="2,0,2,0"/>
                                 <Button Name="ButtonFileClear" Click="ButtonClear_Click" Content="Clear" Style="{StaticResource styleButton}" Grid.Column="2" Margin="5,0,0,0"/>
                             </Grid>
-                            
+
                             <!-- File progress -->
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,5">
-                                <TextBlock Foreground="#9CA3AF" Text="Lines: "/>
+                                <TextBlock Foreground="{DynamicResource TextMutedBrush}" Text="Lines: "/>
 								<TextBlock Foreground="White" Name="RunFilePosition" Text="0"/>
-								<TextBlock Foreground="#9CA3AF" Text=" / "/>
+								<TextBlock Foreground="{DynamicResource TextMutedBrush}" Text=" / "/>
 								<TextBlock Foreground="White" Name="RunFileLength" Text="0"/>
                             </StackPanel>
                             
-                            <Border Background="#2D2D35" CornerRadius="4" Height="150" Margin="0,0,0,10">
-                                <ListView Name="ListViewFile" ScrollViewer.HorizontalScrollBarVisibility="Auto" Background="Transparent" Foreground="#D1D5DB" BorderThickness="0"/>
+                            <Border Background="{DynamicResource SurfaceOverlayBrush}" CornerRadius="4" Height="150" Margin="0,0,0,10">
+                                <ListView Name="ListViewFile" ScrollViewer.HorizontalScrollBarVisibility="Auto" Background="Transparent" Foreground="{DynamicResource TextMutedBrush}" BorderThickness="0"/>
                             </Border>
 
                             <Grid Margin="0,0,0,10">
@@ -94,18 +94,18 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Button Name="ButtonFileStart" Click="ButtonFileStart_Click" Content="Play" Style="{StaticResource styleButton}" Background="#10B981" Foreground="White" Grid.Column="0" Margin="0,0,5,0"/>
-                                <Button Name="ButtonFilePause" Click="ButtonFilePause_Click" Content="Pause" Style="{StaticResource styleButton}" Background="#F59E0B" Foreground="White" Grid.Column="1" Margin="2,0,2,0"/>
+                                <Button Name="ButtonFileStart" Click="ButtonFileStart_Click" Content="Play" Style="{StaticResource styleButton}" Background="{DynamicResource SuccessBrush}" Foreground="White" Grid.Column="0" Margin="0,0,5,0"/>
+                                <Button Name="ButtonFilePause" Click="ButtonFilePause_Click" Content="Pause" Style="{StaticResource styleButton}" Background="{DynamicResource WarningBrush}" Foreground="White" Grid.Column="1" Margin="2,0,2,0"/>
                                 <Button Name="ButtonFileGoto" Click="ButtonFileGoto_Click" Content="Go To" Style="{StaticResource styleButton}" Grid.Column="2" Margin="5,0,0,0"/>
                             </Grid>
 
-                            <CheckBox Name="CheckBoxPauseOnM0" Content="Pause on M0/M1/M30" IsChecked="{util:SettingBinding PauseFileOnHold}" Foreground="#D1D5DB" Margin="0,0,0,5"/>
+                            <CheckBox Name="CheckBoxPauseOnM0" Content="Pause on M0/M1/M30" IsChecked="{util:SettingBinding PauseFileOnHold}" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,5"/>
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
-								<TextBlock Foreground="#9CA3AF" Text="Time: "/>
-								<TextBlock Foreground="#60A5FA" Name="RunFileRunTime" Text="00:00:00" FontWeight="Bold"/>
-								<TextBlock Foreground="#9CA3AF" Text=" / "/>
-								<TextBlock Foreground="#60A5FA" Name="RunFileDuration" Text="00:00:00" FontWeight="Bold"/>
+								<TextBlock Foreground="{DynamicResource TextMutedBrush}" Text="Time: "/>
+								<TextBlock Foreground="{DynamicResource AccentTextBrush}" Name="RunFileRunTime" Text="00:00:00" FontWeight="Bold"/>
+								<TextBlock Foreground="{DynamicResource TextMutedBrush}" Text=" / "/>
+								<TextBlock Foreground="{DynamicResource AccentTextBrush}" Name="RunFileDuration" Text="00:00:00" FontWeight="Bold"/>
                             </StackPanel>
                         </StackPanel>
                     </GroupBox>
@@ -124,7 +124,7 @@
                     <!-- MACROS -->
                     <GroupBox Header="Macros" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,15">
                         <StackPanel Name="stackPanelMacros" Margin="5">
-                            <Button Content="+ Add Macro" Name="ButtonAddMacro" Click="ButtonAddMacro_Click" Style="{StaticResource styleButton}" Margin="0,0,0,10" Background="#374151" Foreground="White"/>
+                            <Button Content="+ Add Macro" Name="ButtonAddMacro" Click="ButtonAddMacro_Click" Style="{StaticResource styleButton}" Margin="0,0,0,10" Background="{DynamicResource SurfaceOverlayBrush}" Foreground="White"/>
                             <StackPanel Name="StackPanelMacros">
                             </StackPanel>
                         </StackPanel>
@@ -134,46 +134,46 @@
                     <GroupBox Header="Machine Calibration" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,15">
                         <StackPanel Margin="5">
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                <CheckBox x:Name="CheckBoxHomeEnable" Content="Enable Homing ($22)" Foreground="#D1D5DB" VerticalAlignment="Center" Width="150"/>
+                                <CheckBox x:Name="CheckBoxHomeEnable" Content="Enable Homing ($22)" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" Width="150"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                <Label Content="Homing Dir Invert Mask ($23)" Width="180" Foreground="#D1D5DB"/>
-                                <TextBox x:Name="TextBoxHomeMask" Width="60" Background="#111111" Foreground="White" BorderThickness="0" Padding="2" VerticalContentAlignment="Center"/>
+                                <Label Content="Homing Dir Invert Mask ($23)" Width="180" Foreground="{DynamicResource TextMutedBrush}"/>
+                                <TextBox x:Name="TextBoxHomeMask" Width="60" Background="{DynamicResource SurfaceSunkenBrush}" Foreground="White" BorderThickness="0" Padding="2" VerticalContentAlignment="Center"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                <Label Content="Homing Feed ($24)" Width="180" Foreground="#D1D5DB"/>
-                                <TextBox x:Name="TextBoxHomeFeed" Width="60" Background="#111111" Foreground="White" BorderThickness="0" Padding="2" VerticalContentAlignment="Center"/>
+                                <Label Content="Homing Feed ($24)" Width="180" Foreground="{DynamicResource TextMutedBrush}"/>
+                                <TextBox x:Name="TextBoxHomeFeed" Width="60" Background="{DynamicResource SurfaceSunkenBrush}" Foreground="White" BorderThickness="0" Padding="2" VerticalContentAlignment="Center"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                                <Label Content="Homing Seek ($25)" Width="180" Foreground="#D1D5DB"/>
-                                <TextBox x:Name="TextBoxHomeSeek" Width="60" Background="#111111" Foreground="White" BorderThickness="0" Padding="2" VerticalContentAlignment="Center"/>
+                                <Label Content="Homing Seek ($25)" Width="180" Foreground="{DynamicResource TextMutedBrush}"/>
+                                <TextBox x:Name="TextBoxHomeSeek" Width="60" Background="{DynamicResource SurfaceSunkenBrush}" Foreground="White" BorderThickness="0" Padding="2" VerticalContentAlignment="Center"/>
                             </StackPanel>
 
                             <TextBlock Text="Axis Setup (Steps/mm)" FontSize="12" FontWeight="SemiBold" Foreground="White" Margin="0,0,0,5"/>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                <Label Content="X Axis ($100)" Width="180" Foreground="#D1D5DB"/>
-                                <TextBox x:Name="TextBoxXSteps" Width="60" Background="#111111" Foreground="White" BorderThickness="0" Padding="2" VerticalContentAlignment="Center"/>
+                                <Label Content="X Axis ($100)" Width="180" Foreground="{DynamicResource TextMutedBrush}"/>
+                                <TextBox x:Name="TextBoxXSteps" Width="60" Background="{DynamicResource SurfaceSunkenBrush}" Foreground="White" BorderThickness="0" Padding="2" VerticalContentAlignment="Center"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                <Label Content="Y Axis ($101)" Width="180" Foreground="#D1D5DB"/>
-                                <TextBox x:Name="TextBoxYSteps" Width="60" Background="#111111" Foreground="White" BorderThickness="0" Padding="2" VerticalContentAlignment="Center"/>
+                                <Label Content="Y Axis ($101)" Width="180" Foreground="{DynamicResource TextMutedBrush}"/>
+                                <TextBox x:Name="TextBoxYSteps" Width="60" Background="{DynamicResource SurfaceSunkenBrush}" Foreground="White" BorderThickness="0" Padding="2" VerticalContentAlignment="Center"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                                <Label Content="Z Axis ($102)" Width="180" Foreground="#D1D5DB"/>
-                                <TextBox x:Name="TextBoxZSteps" Width="60" Background="#111111" Foreground="White" BorderThickness="0" Padding="2" VerticalContentAlignment="Center"/>
+                                <Label Content="Z Axis ($102)" Width="180" Foreground="{DynamicResource TextMutedBrush}"/>
+                                <TextBox x:Name="TextBoxZSteps" Width="60" Background="{DynamicResource SurfaceSunkenBrush}" Foreground="White" BorderThickness="0" Padding="2" VerticalContentAlignment="Center"/>
                             </StackPanel>
 
-                            <Button Content="Read from GRBL" Click="ButtonReadCalibration_Click" Style="{StaticResource styleButton}" Height="25" Background="#3B82F6" Foreground="White" Margin="0,0,0,5"/>
-                            <Button Content="Save to GRBL" Click="ButtonSaveCalibration_Click" Style="{StaticResource styleButton}" Height="25" Background="#10B981" Foreground="White" FontWeight="Bold"/>
+                            <Button Content="Read from GRBL" Click="ButtonReadCalibration_Click" Style="{StaticResource styleButton}" Height="25" Background="{DynamicResource AccentBrush}" Foreground="White" Margin="0,0,0,5"/>
+                            <Button Content="Save to GRBL" Click="ButtonSaveCalibration_Click" Style="{StaticResource styleButton}" Height="25" Background="{DynamicResource SuccessBrush}" Foreground="White" FontWeight="Bold"/>
                         </StackPanel>
                     </GroupBox>
                     
                     <!-- DEBUG -->
                     <GroupBox Header="Debug &amp; Viewport" Foreground="White" FontWeight="SemiBold">
                         <StackPanel Margin="5">
-                            <CheckBox Content="Show Status Messages" IsChecked="{util:SettingBinding ShowStatusLines}" Margin="0,0,0,5" Foreground="#D1D5DB"/>
+                            <CheckBox Content="Show Status Messages" IsChecked="{util:SettingBinding ShowStatusLines}" Margin="0,0,0,5" Foreground="{DynamicResource TextMutedBrush}"/>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                <Label Content="Console Fade (s):" Foreground="#D1D5DB"/>
+                                <Label Content="Console Fade (s):" Foreground="{DynamicResource TextMutedBrush}"/>
                                 <TextBox Text="{util:SettingBinding ConsoleFadeTime}" Width="50" Margin="5,0,0,0"/>
                             </StackPanel>
                             <Button Style="{StaticResource styleButton}" Content="Save Viewport Orientation" Margin="0,2" Click="ButtonSaveViewport_Click"/>
@@ -188,14 +188,14 @@
         </Border>
 
         <!-- RIGHT SIDEBAR -->
-        <Border DockPanel.Dock="Right" Width="300" Background="#1A1A1D" BorderBrush="#2D2D35" BorderThickness="1,0,0,0">
+        <Border DockPanel.Dock="Right" Width="300" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1,0,0,0">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel Margin="10">
                     
                     <!-- HUGE DRO (DIGITAL READOUT) -->
-                    <Border Background="#111111" CornerRadius="8" Padding="15" Margin="0,0,0,15" BorderBrush="#2D2D35" BorderThickness="1">
+                    <Border Background="{DynamicResource SurfaceSunkenBrush}" CornerRadius="8" Padding="15" Margin="0,0,0,15" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1">
                         <StackPanel>
-                            <TextBlock Text="DIGITAL READOUT" Foreground="#6B7280" FontWeight="Bold" FontSize="12" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                            <TextBlock Text="DIGITAL READOUT" Foreground="{DynamicResource TextSubtleBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,10" HorizontalAlignment="Center"/>
                             
                             <!-- X Axis -->
                             <Grid Margin="0,0,0,5">
@@ -204,9 +204,9 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="70"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="X" Grid.Column="0" Foreground="#EF4444" FontWeight="Black" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                <TextBox Name="LabelPosX" Grid.Column="1" Text="0.000" IsReadOnly="True" FontSize="26" FontWeight="Bold" Foreground="#F3F4F6" Background="Transparent" BorderThickness="0" TextAlignment="Right" VerticalAlignment="Center"/>
-                                <TextBox Name="LabelPosMX" Grid.Column="2" Text="0.000" IsReadOnly="True" FontSize="12" Foreground="#6B7280" Background="Transparent" BorderThickness="0" TextAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
+                                <TextBlock Text="X" Grid.Column="0" Foreground="{DynamicResource DangerTextBrush}" FontWeight="Black" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                <TextBox Name="LabelPosX" Grid.Column="1" Text="0.000" IsReadOnly="True" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" Background="Transparent" BorderThickness="0" TextAlignment="Right" VerticalAlignment="Center"/>
+                                <TextBox Name="LabelPosMX" Grid.Column="2" Text="0.000" IsReadOnly="True" FontSize="12" Foreground="{DynamicResource TextSubtleBrush}" Background="Transparent" BorderThickness="0" TextAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
                             </Grid>
                             
                             <!-- Y Axis -->
@@ -216,9 +216,9 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="70"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Y" Grid.Column="0" Foreground="#10B981" FontWeight="Black" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                <TextBox Name="LabelPosY" Grid.Column="1" Text="0.000" IsReadOnly="True" FontSize="26" FontWeight="Bold" Foreground="#F3F4F6" Background="Transparent" BorderThickness="0" TextAlignment="Right" VerticalAlignment="Center"/>
-                                <TextBox Name="LabelPosMY" Grid.Column="2" Text="0.000" IsReadOnly="True" FontSize="12" Foreground="#6B7280" Background="Transparent" BorderThickness="0" TextAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
+                                <TextBlock Text="Y" Grid.Column="0" Foreground="{DynamicResource SuccessTextBrush}" FontWeight="Black" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                <TextBox Name="LabelPosY" Grid.Column="1" Text="0.000" IsReadOnly="True" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" Background="Transparent" BorderThickness="0" TextAlignment="Right" VerticalAlignment="Center"/>
+                                <TextBox Name="LabelPosMY" Grid.Column="2" Text="0.000" IsReadOnly="True" FontSize="12" Foreground="{DynamicResource TextSubtleBrush}" Background="Transparent" BorderThickness="0" TextAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
                             </Grid>
                             
                             <!-- Z Axis -->
@@ -228,17 +228,17 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="70"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Z" Grid.Column="0" Foreground="#3B82F6" FontWeight="Black" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                <TextBox Name="LabelPosZ" Grid.Column="1" Text="0.000" IsReadOnly="True" FontSize="26" FontWeight="Bold" Foreground="#F3F4F6" Background="Transparent" BorderThickness="0" TextAlignment="Right" VerticalAlignment="Center"/>
-                                <TextBox Name="LabelPosMZ" Grid.Column="2" Text="0.000" IsReadOnly="True" FontSize="12" Foreground="#6B7280" Background="Transparent" BorderThickness="0" TextAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
+                                <TextBlock Text="Z" Grid.Column="0" Foreground="{DynamicResource AccentTextBrush}" FontWeight="Black" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                <TextBox Name="LabelPosZ" Grid.Column="1" Text="0.000" IsReadOnly="True" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" Background="Transparent" BorderThickness="0" TextAlignment="Right" VerticalAlignment="Center"/>
+                                <TextBox Name="LabelPosMZ" Grid.Column="2" Text="0.000" IsReadOnly="True" FontSize="12" Foreground="{DynamicResource TextSubtleBrush}" Background="Transparent" BorderThickness="0" TextAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
                             </Grid>
 
-                            <Separator Background="#2D2D35" Margin="0,15"/>
+                            <Separator Background="{DynamicResource SurfaceOverlayBrush}" Margin="0,15"/>
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <TextBlock Text="Realtime Feed: " Foreground="#9CA3AF" FontSize="14" VerticalAlignment="Center"/>
-                                <TextBlock Name="LabelFeedRateRealtime" Text="0" Foreground="#F3F4F6" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                                <TextBlock Text=" mm/min" Foreground="#9CA3AF" FontSize="14" VerticalAlignment="Center"/>
+                                <TextBlock Text="Realtime Feed: " Foreground="{DynamicResource TextMutedBrush}" FontSize="14" VerticalAlignment="Center"/>
+                                <TextBlock Name="LabelFeedRateRealtime" Text="0" Foreground="{DynamicResource TextBrush}" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                                <TextBlock Text=" mm/min" Foreground="{DynamicResource TextMutedBrush}" FontSize="14" VerticalAlignment="Center"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -246,10 +246,10 @@
                     <!-- JOGGING (MANUAL) -->
                     <GroupBox Header="Jog Controls" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,15">
                         <StackPanel Margin="5">
-                            <CheckBox Name="CheckBoxEnableJog" Content="Enable Keyboard Jogging" Checked="CheckBoxEnableJog_Checked" Unchecked="CheckBoxEnableJog_Unchecked" Foreground="#D1D5DB" Margin="0,0,0,10"/>
+                            <CheckBox Name="CheckBoxEnableJog" Content="Enable Keyboard Jogging" Checked="CheckBoxEnableJog_Checked" Unchecked="CheckBoxEnableJog_Unchecked" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,10"/>
                             
-                            <Border Background="#2D2D35" CornerRadius="4" Padding="1" IsEnabled="{Binding ElementName=CheckBoxEnableJog, Path=IsChecked}">
-                                <TextBox Name="TextBoxJog" HorizontalContentAlignment="Center" Height="40" Text="CLICK HERE TO JOG WITH KEYBOARD" Foreground="#FCD34D" Background="Transparent" BorderThickness="0" FontWeight="Bold"
+                            <Border Background="{DynamicResource SurfaceOverlayBrush}" CornerRadius="4" Padding="1" IsEnabled="{Binding ElementName=CheckBoxEnableJog, Path=IsChecked}">
+                                <TextBox Name="TextBoxJog" HorizontalContentAlignment="Center" Height="40" Text="CLICK HERE TO JOG WITH KEYBOARD" Foreground="{DynamicResource WarningTextBrush}" Background="Transparent" BorderThickness="0" FontWeight="Bold"
 										 PreviewKeyDown="Jogging_KeyDown" PreviewKeyUp="Jogging_KeyUp" LostKeyboardFocus="Jogging_LostKeyboardFocus"/>
                             </Border>
 
@@ -269,33 +269,33 @@
                                 </Grid.RowDefinitions>
 
                                 <!-- Top Row -->
-                                <Button Content="↖" Grid.Column="0" Grid.Row="0" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="X-Y" Style="{StaticResource styleButton}" Background="#374151" Foreground="White" FontWeight="Bold"/>
-                                <Button Content="Y+" Grid.Column="1" Grid.Row="0" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="Y" Style="{StaticResource styleButton}" Background="#374151" Foreground="White" FontWeight="Bold"/>
-                                <Button Content="↗" Grid.Column="2" Grid.Row="0" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="XY" Style="{StaticResource styleButton}" Background="#374151" Foreground="White" FontWeight="Bold"/>
-                                <Button Content="Z+" Grid.Column="4" Grid.Row="0" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="Z" Style="{StaticResource styleButton}" Background="#4B5563" Foreground="White" FontWeight="Bold"/>
+                                <Button Content="↖" Grid.Column="0" Grid.Row="0" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="X-Y" Style="{StaticResource styleButton}" Background="{DynamicResource SurfaceOverlayBrush}" Foreground="White" FontWeight="Bold"/>
+                                <Button Content="Y+" Grid.Column="1" Grid.Row="0" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="Y" Style="{StaticResource styleButton}" Background="{DynamicResource SurfaceOverlayBrush}" Foreground="White" FontWeight="Bold"/>
+                                <Button Content="↗" Grid.Column="2" Grid.Row="0" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="XY" Style="{StaticResource styleButton}" Background="{DynamicResource SurfaceOverlayBrush}" Foreground="White" FontWeight="Bold"/>
+                                <Button Content="Z+" Grid.Column="4" Grid.Row="0" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="Z" Style="{StaticResource styleButton}" Background="{DynamicResource LineStrongBrush}" Foreground="White" FontWeight="Bold"/>
 
                                 <!-- Middle Row -->
-                                <Button Content="X-" Grid.Column="0" Grid.Row="1" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="X-" Style="{StaticResource styleButton}" Background="#374151" Foreground="White" FontWeight="Bold"/>
-                                <Button Content="⏺" Grid.Column="1" Grid.Row="1" Margin="2" Click="ButtonJog_Click" Tag="STOP" Style="{StaticResource styleButton}" Background="#EF4444" Foreground="White" FontWeight="Bold" ToolTip="Stop Jogging / Cancel"/>
-                                <Button Content="X+" Grid.Column="2" Grid.Row="1" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="X" Style="{StaticResource styleButton}" Background="#374151" Foreground="White" FontWeight="Bold"/>
+                                <Button Content="X-" Grid.Column="0" Grid.Row="1" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="X-" Style="{StaticResource styleButton}" Background="{DynamicResource SurfaceOverlayBrush}" Foreground="White" FontWeight="Bold"/>
+                                <Button Content="⏺" Grid.Column="1" Grid.Row="1" Margin="2" Click="ButtonJog_Click" Tag="STOP" Style="{StaticResource styleButton}" Background="{DynamicResource DangerBrush}" Foreground="White" FontWeight="Bold" ToolTip="Stop Jogging / Cancel"/>
+                                <Button Content="X+" Grid.Column="2" Grid.Row="1" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="X" Style="{StaticResource styleButton}" Background="{DynamicResource SurfaceOverlayBrush}" Foreground="White" FontWeight="Bold"/>
 
                                 <!-- Bottom Row -->
-                                <Button Content="↙" Grid.Column="0" Grid.Row="2" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="X-Y-" Style="{StaticResource styleButton}" Background="#374151" Foreground="White" FontWeight="Bold"/>
-                                <Button Content="Y-" Grid.Column="1" Grid.Row="2" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="Y-" Style="{StaticResource styleButton}" Background="#374151" Foreground="White" FontWeight="Bold"/>
-                                <Button Content="↘" Grid.Column="2" Grid.Row="2" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="XY-" Style="{StaticResource styleButton}" Background="#374151" Foreground="White" FontWeight="Bold"/>
-                                <Button Content="Z-" Grid.Column="4" Grid.Row="2" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="Z-" Style="{StaticResource styleButton}" Background="#4B5563" Foreground="White" FontWeight="Bold"/>
+                                <Button Content="↙" Grid.Column="0" Grid.Row="2" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="X-Y-" Style="{StaticResource styleButton}" Background="{DynamicResource SurfaceOverlayBrush}" Foreground="White" FontWeight="Bold"/>
+                                <Button Content="Y-" Grid.Column="1" Grid.Row="2" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="Y-" Style="{StaticResource styleButton}" Background="{DynamicResource SurfaceOverlayBrush}" Foreground="White" FontWeight="Bold"/>
+                                <Button Content="↘" Grid.Column="2" Grid.Row="2" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="XY-" Style="{StaticResource styleButton}" Background="{DynamicResource SurfaceOverlayBrush}" Foreground="White" FontWeight="Bold"/>
+                                <Button Content="Z-" Grid.Column="4" Grid.Row="2" Margin="2" PreviewMouseLeftButtonDown="ButtonJog_MouseDown" PreviewMouseLeftButtonUp="ButtonJog_MouseUp" MouseLeave="ButtonJog_MouseUp" Tag="Z-" Style="{StaticResource styleButton}" Background="{DynamicResource LineStrongBrush}" Foreground="White" FontWeight="Bold"/>
                             </Grid>
 
                             <!-- PRESETS -->
                             <StackPanel Margin="0,15,0,0">
-                                <TextBlock Text="Step Size presets:" Foreground="#9CA3AF" FontSize="11" Margin="5,0,0,2"/>
+                                <TextBlock Text="Step Size presets:" Foreground="{DynamicResource TextMutedBrush}" FontSize="11" Margin="5,0,0,2"/>
                                 <WrapPanel HorizontalAlignment="Center">
                                     <Button Content="0.1" Click="ButtonPresetStep_Click" Style="{StaticResource styleButton}" Margin="2" Width="45"/>
                                     <Button Content="1" Click="ButtonPresetStep_Click" Style="{StaticResource styleButton}" Margin="2" Width="45"/>
                                     <Button Content="10" Click="ButtonPresetStep_Click" Style="{StaticResource styleButton}" Margin="2" Width="45"/>
                                     <Button Content="100" Click="ButtonPresetStep_Click" Style="{StaticResource styleButton}" Margin="2" Width="45"/>
                                 </WrapPanel>
-                                <TextBlock Text="Feed Rate presets:" Foreground="#9CA3AF" FontSize="11" Margin="5,10,0,2"/>
+                                <TextBlock Text="Feed Rate presets:" Foreground="{DynamicResource TextMutedBrush}" FontSize="11" Margin="5,10,0,2"/>
                                 <WrapPanel HorizontalAlignment="Center">
                                     <Button Content="100" Click="ButtonPresetFeed_Click" Style="{StaticResource styleButton}" Margin="2" Width="45"/>
                                     <Button Content="500" Click="ButtonPresetFeed_Click" Style="{StaticResource styleButton}" Margin="2" Width="45"/>
@@ -316,29 +316,29 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
-                                <Label Content="Feed:" Foreground="#D1D5DB" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                                <Label Content="Feed:" Foreground="{DynamicResource TextMutedBrush}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
                                 <TextBox Name="TextBoxJogFeed" Text="{util:SettingBinding JogFeed}" Grid.Row="0" Grid.Column="1" Margin="5" VerticalContentAlignment="Center"/>
-                                <Label Content="Dist:" Foreground="#D1D5DB" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center"/>
+                                <Label Content="Dist:" Foreground="{DynamicResource TextMutedBrush}" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center"/>
                                 <TextBox Name="TextBoxJogDistance" Text="{util:SettingBinding JogDistance}" Grid.Row="0" Grid.Column="3" Margin="5" VerticalContentAlignment="Center"/>
 
-                                <Label Content="Fine F:" Foreground="#D1D5DB" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+                                <Label Content="Fine F:" Foreground="{DynamicResource TextMutedBrush}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
                                 <TextBox Name="TextBoxJogFeedFine" Text="{util:SettingBinding JogFeedCtrl}" Grid.Row="1" Grid.Column="1" Margin="5" VerticalContentAlignment="Center"/>
-                                <Label Content="Fine D:" Foreground="#D1D5DB" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center"/>
+                                <Label Content="Fine D:" Foreground="{DynamicResource TextMutedBrush}" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center"/>
                                 <TextBox Name="TextBoxJogDistanceFine" Text="{util:SettingBinding JogDistanceCtrl}" Grid.Row="1" Grid.Column="3" Margin="5" VerticalContentAlignment="Center"/>
                             </Grid>
 
-                            <Separator Background="#2D2D35" Margin="0,15"/>
-                            <TextBlock Text="MDI (Manual Data Input)" Foreground="#9CA3AF" FontSize="11" Margin="0,0,0,5"/>
+                            <Separator Background="{DynamicResource SurfaceOverlayBrush}" Margin="0,15"/>
+                            <TextBlock Text="MDI (Manual Data Input)" Foreground="{DynamicResource TextMutedBrush}" FontSize="11" Margin="0,0,0,5"/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBox Name="TextBoxManual" Height="30" PreviewKeyDown="TextBoxManual_PreviewKeyDown" TextChanged="TextBoxManual_TextChanged" Grid.Column="0" Margin="0,0,5,0" VerticalContentAlignment="Center"/>
-                                <Button Name="ButtonManualSend" Click="ButtonManualSend_Click" Style="{StaticResource styleButton}" Content="Send" Grid.Column="1" Width="60" Background="#3B82F6" Foreground="White"/>
+                                <Button Name="ButtonManualSend" Click="ButtonManualSend_Click" Style="{StaticResource styleButton}" Content="Send" Grid.Column="1" Width="60" Background="{DynamicResource AccentBrush}" Foreground="White"/>
                             </Grid>
-                            <TextBox Name="TextBoxPreview" IsReadOnly="True" Margin="0,5,0,5" Background="#111111" Foreground="#9CA3AF" BorderThickness="0" Height="25" VerticalContentAlignment="Center"/>
-                            <CheckBox Name="CheckBoxUseExpressions" Content="Use Expressions" IsChecked="{util:SettingBinding ManualUseExpressions}" Checked="CheckBoxUseExpressions_Changed" Unchecked="CheckBoxUseExpressions_Changed" Foreground="#D1D5DB" Margin="0,0,0,10"/>
+                            <TextBox Name="TextBoxPreview" IsReadOnly="True" Margin="0,5,0,5" Background="{DynamicResource SurfaceSunkenBrush}" Foreground="{DynamicResource TextMutedBrush}" BorderThickness="0" Height="25" VerticalContentAlignment="Center"/>
+                            <CheckBox Name="CheckBoxUseExpressions" Content="Use Expressions" IsChecked="{util:SettingBinding ManualUseExpressions}" Checked="CheckBoxUseExpressions_Changed" Unchecked="CheckBoxUseExpressions_Changed" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,10"/>
 
                             <WrapPanel HorizontalAlignment="Center">
                                 <Button Name="ButtonManualSetG10Zero" Click="ButtonManualSetG10Zero_Click" Style="{StaticResource styleButton}" Content="Zero (G10)" Margin="2" Width="80"/>
@@ -354,8 +354,8 @@
                             
                             <!-- Feed -->
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                <TextBlock Text="Feed Override: " Foreground="#D1D5DB"/>
-                                <TextBlock Name="RunFeedOvr" Foreground="#60A5FA" FontWeight="Bold"/>
+                                <TextBlock Text="Feed Override: " Foreground="{DynamicResource TextMutedBrush}"/>
+                                <TextBlock Name="RunFeedOvr" Foreground="{DynamicResource AccentTextBrush}" FontWeight="Bold"/>
                                 <Button Name="ButtonFeedRateOvr" Content="100%" Click="ButtonFeedOverride_Click" Tag="100%" Style="{StaticResource styleButton}" Margin="10,0,0,0" Padding="5,0"/>
                             </StackPanel>
                             <Grid Margin="0,0,0,15">
@@ -364,15 +364,15 @@
                                 </Grid.ColumnDefinitions>
                                 <Button Click="ButtonFeedOverride_Click" Content="-10%" Style="{StaticResource styleButton}" Tag="-10%" Grid.Column="0" Margin="1"/>
                                 <Button Click="ButtonFeedOverride_Click" Content="-1%" Style="{StaticResource styleButton}" Tag="-1%" Grid.Column="1" Margin="1"/>
-                                <Button Click="ButtonFeedOverride_Click" Content="100%" Style="{StaticResource styleButton}" Tag="100%" Grid.Column="2" Margin="1" Background="#374151" Foreground="White"/>
+                                <Button Click="ButtonFeedOverride_Click" Content="100%" Style="{StaticResource styleButton}" Tag="100%" Grid.Column="2" Margin="1" Background="{DynamicResource SurfaceOverlayBrush}" Foreground="White"/>
                                 <Button Click="ButtonFeedOverride_Click" Content="+1%" Style="{StaticResource styleButton}" Tag="+1%" Grid.Column="3" Margin="1"/>
                                 <Button Click="ButtonFeedOverride_Click" Content="+10%" Style="{StaticResource styleButton}" Tag="+10%" Grid.Column="4" Margin="1"/>
                             </Grid>
 
                             <!-- Spindle -->
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                <TextBlock Text="Spindle Override: " Foreground="#D1D5DB"/>
-                                <TextBlock Name="RunSpindleOvr" Foreground="#60A5FA" FontWeight="Bold"/>
+                                <TextBlock Text="Spindle Override: " Foreground="{DynamicResource TextMutedBrush}"/>
+                                <TextBlock Name="RunSpindleOvr" Foreground="{DynamicResource AccentTextBrush}" FontWeight="Bold"/>
                             </StackPanel>
                             <Grid Margin="0,0,0,15">
                                 <Grid.ColumnDefinitions>
@@ -380,15 +380,15 @@
                                 </Grid.ColumnDefinitions>
                                 <Button Click="ButtonSpindleOverride_Click" Content="-10%" Style="{StaticResource styleButton}" Tag="-10%" Grid.Column="0" Margin="1"/>
                                 <Button Click="ButtonSpindleOverride_Click" Content="-1%" Style="{StaticResource styleButton}" Tag="-1%" Grid.Column="1" Margin="1"/>
-                                <Button Click="ButtonSpindleOverride_Click" Content="100%" Style="{StaticResource styleButton}" Tag="100%" Grid.Column="2" Margin="1" Background="#374151" Foreground="White"/>
+                                <Button Click="ButtonSpindleOverride_Click" Content="100%" Style="{StaticResource styleButton}" Tag="100%" Grid.Column="2" Margin="1" Background="{DynamicResource SurfaceOverlayBrush}" Foreground="White"/>
                                 <Button Click="ButtonSpindleOverride_Click" Content="+1%" Style="{StaticResource styleButton}" Tag="+1%" Grid.Column="3" Margin="1"/>
                                 <Button Click="ButtonSpindleOverride_Click" Content="+10%" Style="{StaticResource styleButton}" Tag="+10%" Grid.Column="4" Margin="1"/>
                             </Grid>
 
                             <!-- Rapid -->
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                <TextBlock Text="Rapid Override: " Foreground="#D1D5DB"/>
-                                <TextBlock Name="RunRapidOvr" Foreground="#60A5FA" FontWeight="Bold"/>
+                                <TextBlock Text="Rapid Override: " Foreground="{DynamicResource TextMutedBrush}"/>
+                                <TextBlock Name="RunRapidOvr" Foreground="{DynamicResource AccentTextBrush}" FontWeight="Bold"/>
                             </StackPanel>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -396,8 +396,9 @@
                                 </Grid.ColumnDefinitions>
                                 <Button Click="ButtonRapidOverride_Click" Content="25%" Style="{StaticResource styleButton}" Tag="25" Grid.Column="0" Margin="1"/>
                                 <Button Click="ButtonRapidOverride_Click" Content="50%" Style="{StaticResource styleButton}" Tag="50" Grid.Column="1" Margin="1"/>
-                                <Button Click="ButtonRapidOverride_Click" Content="100%" Style="{StaticResource styleButton}" Tag="100" Grid.Column="2" Margin="1" Background="#374151" Foreground="White"/>
+                                <Button Click="ButtonRapidOverride_Click" Content="100%" Style="{StaticResource styleButton}" Tag="100" Grid.Column="2" Margin="1" Background="{DynamicResource SurfaceOverlayBrush}" Foreground="White"/>
                             </Grid>
+
                         </StackPanel>
                     </GroupBox>
 
@@ -411,10 +412,10 @@
                                 <Button Name="ButtonHeightMapClear" Click="ButtonHeightmapClear_Click" Content="Clear" Style="{StaticResource styleButton}" Margin="2" Width="60"/>
                             </WrapPanel>
 
-                            <Grid Name="GridProbingControls" Background="#2D2D35" Margin="0,0,0,10">
+                            <Grid Name="GridProbingControls" Background="{DynamicResource SurfaceOverlayBrush}" Margin="0,0,0,10">
                                 <StackPanel Margin="10">
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                        <TextBlock Text="Points: " Foreground="#9CA3AF"/>
+                                        <TextBlock Text="Points: " Foreground="{DynamicResource TextMutedBrush}"/>
                                         <Label Name="LabelHeightMapProgress" Content="0/0" Foreground="White" FontWeight="Bold" Padding="0"/>
                                     </StackPanel>
                                     <Grid Margin="0,0,0,10">
@@ -422,13 +423,13 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
-                                        <Button Name="ButtonHeightMapStart" Content="Run Probe" Click="ButtonHeightMapStart_Click" Style="{StaticResource styleButton}" Background="#10B981" Foreground="White" Grid.Column="0" Margin="0,0,5,0"/>
-                                        <Button Name="ButtonHeightMapPause" Content="Pause" Click="ButtonHeightMapPause_Click" Style="{StaticResource styleButton}" Background="#F59E0B" Foreground="White" Grid.Column="1" Margin="5,0,0,0"/>
+                                        <Button Name="ButtonHeightMapStart" Content="Run Probe" Click="ButtonHeightMapStart_Click" Style="{StaticResource styleButton}" Background="{DynamicResource SuccessBrush}" Foreground="White" Grid.Column="0" Margin="0,0,5,0"/>
+                                        <Button Name="ButtonHeightMapPause" Content="Pause" Click="ButtonHeightMapPause_Click" Style="{StaticResource styleButton}" Background="{DynamicResource WarningBrush}" Foreground="White" Grid.Column="1" Margin="5,0,0,0"/>
                                     </Grid>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <TextBlock Text="MinZ: " Foreground="#9CA3AF"/>
+                                        <TextBlock Text="MinZ: " Foreground="{DynamicResource TextMutedBrush}"/>
                                         <Label Name="LabelHeightMapMinZ" Content="0" Foreground="White" Margin="0,0,15,0" Padding="0"/>
-                                        <TextBlock Text="MaxZ: " Foreground="#9CA3AF"/>
+                                        <TextBlock Text="MaxZ: " Foreground="{DynamicResource TextMutedBrush}"/>
                                         <Label Name="LabelHeightMapMaxZ" Content="0" Foreground="White" Padding="0"/>
                                     </StackPanel>
                                 </StackPanel>
@@ -439,28 +440,28 @@
                     <!-- MANUAL PROBING (TLO) -->
                     <GroupBox Name="groupBoxTLO" Header="Tool Length Offset (TLO)" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,15">
                         <StackPanel Margin="5">
-                            <GroupBox Header="Last Probe Position" Foreground="#9CA3AF">
+                            <GroupBox Header="Last Probe Position" Foreground="{DynamicResource TextMutedBrush}">
                                 <StackPanel Margin="5">
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                        <TextBlock Text="Machine: " Width="60" Foreground="#D1D5DB"/>
-                                        <TextBlock Text="{Binding LastProbePosMachine.X, StringFormat=N3}" Width="50" Foreground="#60A5FA"/>
-                                        <TextBlock Text="{Binding LastProbePosMachine.Y, StringFormat=N3}" Width="50" Foreground="#60A5FA"/>
-                                        <TextBlock Text="{Binding LastProbePosMachine.Z, StringFormat=N3}" Width="50" Foreground="#60A5FA"/>
+                                        <TextBlock Text="Machine: " Width="60" Foreground="{DynamicResource TextMutedBrush}"/>
+                                        <TextBlock Text="{Binding LastProbePosMachine.X, StringFormat=N3}" Width="50" Foreground="{DynamicResource AccentTextBrush}"/>
+                                        <TextBlock Text="{Binding LastProbePosMachine.Y, StringFormat=N3}" Width="50" Foreground="{DynamicResource AccentTextBrush}"/>
+                                        <TextBlock Text="{Binding LastProbePosMachine.Z, StringFormat=N3}" Width="50" Foreground="{DynamicResource AccentTextBrush}"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Work: " Width="60" Foreground="#D1D5DB"/>
-                                        <TextBlock Text="{Binding LastProbePosWork.X, StringFormat=N3}" Width="50" Foreground="#60A5FA"/>
-                                        <TextBlock Text="{Binding LastProbePosWork.Y, StringFormat=N3}" Width="50" Foreground="#60A5FA"/>
-                                        <TextBlock Text="{Binding LastProbePosWork.Z, StringFormat=N3}" Width="50" Foreground="#60A5FA"/>
+                                        <TextBlock Text="Work: " Width="60" Foreground="{DynamicResource TextMutedBrush}"/>
+                                        <TextBlock Text="{Binding LastProbePosWork.X, StringFormat=N3}" Width="50" Foreground="{DynamicResource AccentTextBrush}"/>
+                                        <TextBlock Text="{Binding LastProbePosWork.Y, StringFormat=N3}" Width="50" Foreground="{DynamicResource AccentTextBrush}"/>
+                                        <TextBlock Text="{Binding LastProbePosWork.Z, StringFormat=N3}" Width="50" Foreground="{DynamicResource AccentTextBrush}"/>
                                     </StackPanel>
                                 </StackPanel>
                             </GroupBox>
 
-                            <CheckBox Content="Use Actual Pos vs Probe" IsChecked="{util:SettingBinding TLSUseActualPos}" Foreground="#D1D5DB" Margin="0,10,0,5"/>
+                            <CheckBox Content="Use Actual Pos vs Probe" IsChecked="{util:SettingBinding TLSUseActualPos}" Foreground="{DynamicResource TextMutedBrush}" Margin="0,10,0,5"/>
                             
                             <StackPanel Orientation="Horizontal" Margin="0,5">
                                 <Button Content="Save Pos" Style="{StaticResource styleButton}" Click="ButtonSaveTLOPos_Click" Width="80" Margin="0,0,10,0"/>
-                                <TextBlock Text="@MZ: " Foreground="#9CA3AF" VerticalAlignment="Center"/>
+                                <TextBlock Text="@MZ: " Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center"/>
                                 <TextBlock Text="{util:SettingBinding ToolLengthSetterPos, StringFormat=N3}" Foreground="White" VerticalAlignment="Center"/>
                             </StackPanel>
 
@@ -472,14 +473,14 @@
                                 </Grid.ColumnDefinitions>
                                 <Button Content="Apply TLO" Style="{StaticResource styleButton}" Click="ButtonApplyTLO_Click" Grid.Column="0" Margin="0,0,2,0"/>
                                 <Button Content="Clear TLO" Style="{StaticResource styleButton}" Click="ButtonClearTLO_Click" Grid.Column="1" Margin="2,0,2,0"/>
-                                <TextBox Name="TextBoxCurrentTLO" Text="0.000" IsReadOnly="True" Grid.Column="2" Margin="2,0,0,0" VerticalContentAlignment="Center" Background="#111111" Foreground="White" BorderThickness="0"/>
+                                <TextBox Name="TextBoxCurrentTLO" Text="0.000" IsReadOnly="True" Grid.Column="2" Margin="2,0,0,0" VerticalContentAlignment="Center" Background="{DynamicResource SurfaceSunkenBrush}" Foreground="White" BorderThickness="0"/>
                             </Grid>
 
-                            <GroupBox Header="Probe Offset" Foreground="#9CA3AF" Margin="0,10,0,0">
+                            <GroupBox Header="Probe Offset" Foreground="{DynamicResource TextMutedBrush}" Margin="0,10,0,0">
                                 <StackPanel Orientation="Horizontal" Margin="5">
-                                    <TextBlock Text="X: " Foreground="#D1D5DB" VerticalAlignment="Center"/>
+                                    <TextBlock Text="X: " Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center"/>
                                     <TextBox Width="50" Text="{util:SettingBinding ProbeOffsetX}" Margin="0,0,15,0" VerticalContentAlignment="Center"/>
-                                    <TextBlock Text="Y: " Foreground="#D1D5DB" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Y: " Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center"/>
                                     <TextBox Width="50" Text="{util:SettingBinding ProbeOffsetY}" VerticalContentAlignment="Center"/>
                                 </StackPanel>
                             </GroupBox>
@@ -488,12 +489,12 @@
 
                     <Button Name="ButtonSyncBuffer" Click="ButtonSyncBuffer_Click" Height="40" Margin="0,0,0,20">
                         <Grid>
-                            <ProgressBar Name="ProgressBarBufferCapacity" Maximum="{util:SettingBinding ControllerBufferSize}" Background="#111111" Foreground="#3B82F6" Opacity="0.3"/>
+                            <ProgressBar Name="ProgressBarBufferCapacity" Maximum="{util:SettingBinding ControllerBufferSize}" Background="{DynamicResource SurfaceSunkenBrush}" Foreground="{DynamicResource AccentTextBrush}" Opacity="0.3"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <TextBlock Text="Buffer: " Foreground="White" FontWeight="Bold" VerticalAlignment="Center"/>
                                 <Label Name="LabelBufferState" Content="0" Foreground="White" FontWeight="Bold" Padding="0" VerticalAlignment="Center"/>
-                                <TextBlock Text=" / " Foreground="#9CA3AF" VerticalAlignment="Center"/>
-                                <TextBlock Text="{util:SettingBinding ControllerBufferSize}" Foreground="#9CA3AF" VerticalAlignment="Center"/>
+                                <TextBlock Text=" / " Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{util:SettingBinding ControllerBufferSize}" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Grid>
                     </Button>
@@ -503,7 +504,7 @@
         </Border>
 
         <!-- CENTER 3D VIEWPORT -->
-        <Grid Background="#27272C">
+        <Grid Background="{DynamicResource SurfaceRaisedBrush}">
             <StackPanel Panel.ZIndex="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,0,0,20">
                 <Label Name="LabelStateProbe" Content="Probe" FontWeight="ExtraBold" FontSize="40" Foreground="Red" Visibility="Collapsed"/>
                 <Label Name="LabelStateLimitX" Content="LimitX" FontWeight="ExtraBold" FontSize="40" Foreground="Red" Visibility="Collapsed"/>
@@ -531,24 +532,12 @@
 					Thickness="{util:SettingBinding GridThickness}"/>
                 <h:MeshGeometryVisual3D
 					x:Name="ModelHeightMap">
-                    <h:MeshGeometryVisual3D.Material>
-                        <MaterialGroup>
-                            <DiffuseMaterial>
-                                <DiffuseMaterial.Brush>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0, 1" Opacity="{util:SettingBinding HeightMapOpacity}">
-                                        <LinearGradientBrush.GradientStops>
-                                            <GradientStop Color="Blue" Offset="0"/>
-                                            <GradientStop Color="Cyan" Offset="0.2"/>
-                                            <GradientStop Color="Green" Offset="0.4"/>
-                                            <GradientStop Color="Yellow" Offset="0.6"/>
-                                            <GradientStop Color="Red" Offset="0.8"/>
-                                            <GradientStop Color="Purple" Offset="1"/>
-                                        </LinearGradientBrush.GradientStops>
-                                    </LinearGradientBrush>
-                                </DiffuseMaterial.Brush>
-                            </DiffuseMaterial>
-                        </MaterialGroup>
-                    </h:MeshGeometryVisual3D.Material>
+                    <!--
+                        The material is built in code from Colormap so that the surface and
+                        the legend beside it can never drift apart. The rainbow ramp that
+                        used to be here was not perceptually uniform: it invented a bright
+                        band at yellow, so a gentle bow read as a sharp ridge.
+                    -->
                 </h:MeshGeometryVisual3D>
                 <h:LinesVisual3D x:Name="ModelHeightMapBoundary" Thickness="2" Color="Lime"/>
                 <h:PointsVisual3D x:Name="ModelHeightMapPoints" Color="Red" Size="4"/>
@@ -567,7 +556,7 @@
             </h:HelixViewport3D>
 
             <!-- Console Overlay on the bottom left of viewport -->
-            <ListBox Name="ListBoxHistory" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10" IsHitTestVisible="False" BorderThickness="0" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="#A1A1AA" FontSize="14">
+            <ListBox Name="ListBoxHistory" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10" IsHitTestVisible="False" BorderThickness="0" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="{DynamicResource TextMutedBrush}" FontSize="14">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel VerticalAlignment="Bottom"/>

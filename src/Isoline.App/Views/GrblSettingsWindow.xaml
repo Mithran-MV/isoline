@@ -7,27 +7,27 @@
         mc:Ignorable="d"
         Title="GrblSettingsWindow"
         Closing="Window_Closing"
-        Height="700" Width="400" Background="#27272C" Foreground="#F3F4F6">
+        Height="700" Width="400" Background="{DynamicResource SurfaceRaisedBrush}" Foreground="{DynamicResource TextBrush}">
     <Window.Resources>
         <Style TargetType="TextBox">
-            <Setter Property="Background" Value="#111111"/>
-            <Setter Property="Foreground" Value="#F3F4F6"/>
+            <Setter Property="Background" Value="{DynamicResource SurfaceSunkenBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#F3F4F6"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="Margin" Value="5"/>
         </Style>
         <Style TargetType="Button">
-            <Setter Property="Background" Value="#374151"/>
+            <Setter Property="Background" Value="{DynamicResource SurfaceOverlayBrush}"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <Style TargetType="ScrollViewer">
-            <Setter Property="Background" Value="#27272C"/>
+            <Setter Property="Background" Value="{DynamicResource SurfaceRaisedBrush}"/>
         </Style>
     </Window.Resources>
-    <Grid Margin="5" Background="#27272C">
+    <Grid Margin="5" Background="{DynamicResource SurfaceRaisedBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="230*"/>
             <RowDefinition Height="Auto"/>

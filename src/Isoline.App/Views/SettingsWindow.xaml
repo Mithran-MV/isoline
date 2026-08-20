@@ -7,7 +7,7 @@
 		xmlns:util="clr-namespace:Isoline.Util"
 		xmlns:sys="clr-namespace:System;assembly=mscorlib"
 		mc:Ignorable="d"
-		Title="SettingsWindow" Height="380" Width="420" Closed="Window_Closed" ResizeMode="NoResize" Background="#27272C" Foreground="#F3F4F6">
+		Title="SettingsWindow" Height="380" Width="420" Closed="Window_Closed" ResizeMode="NoResize" Background="{DynamicResource SurfaceRaisedBrush}" Foreground="{DynamicResource TextBrush}">
 	<Window.Resources>
 		<Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
 			<Setter Property="VerticalContentAlignment" Value="Center"/>
