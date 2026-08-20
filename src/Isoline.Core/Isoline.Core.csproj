@@ -15,6 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Clipper2" Version="1.5.4" />
   </ItemGroup>
 
   <ItemGroup>
