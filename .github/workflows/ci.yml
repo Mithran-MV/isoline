@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  core:
+    # Isoline.Core and its tests are platform independent by design, so they are
+    # built and run on Linux - if that ever stops working, something has leaked a
+    # Windows dependency back into the core.
+    name: Core + tests (Linux)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore tests/Isoline.Core.Tests/Isoline.Core.Tests.csproj
+
+      - name: Build
+        run: dotnet build tests/Isoline.Core.Tests/Isoline.Core.Tests.csproj -c Release --no-restore
+
+      - name: Test
+        run: dotnet test tests/Isoline.Core.Tests/Isoline.Core.Tests.csproj -c Release --no-build --verbosity normal --logger "trx;LogFileName=results.trx"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: '**/TestResults/*.trx'
+          if-no-files-found: ignore
+
+  app:
+    name: Application (Windows)
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build solution
+        run: dotnet build Isoline.sln -c Release
+
+      - name: Publish
+        run: dotnet publish src/Isoline.App/Isoline.App.csproj -c Release -r win-x64 --self-contained false -o artifacts/isoline
+
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: isoline-win-x64
+          path: artifacts/isoline
