@@ -48,9 +48,79 @@ namespace Isoline.Tests
 			Assert.Equal(10, map.Max.X, 9);
 		}
 
+		[Fact]
+		public void InterpolationReproducesProbedPointsExactly()
+		{
+			HeightMap map = Probed((x, y) => 0.1 * x - 0.05 * y);
 
+			foreach (InterpolationMode mode in new[] { InterpolationMode.Bilinear, InterpolationMode.Bicubic })
+			{
+				map.Interpolation = mode;
 
+				for (int x = 0; x < map.SizeX; x++)
+				{
+					for (int y = 0; y < map.SizeY; y++)
+					{
+						Vector2 p = map.GetCoordinates(x, y);
+						Assert.Equal(map.Points[x, y].Value, map.InterpolateZ(p.X, p.Y), 9);
+					}
+				}
+			}
+		}
 
+		[Fact]
+		public void BothSchemesAreExactOnAPlane()
+		{
+			// a plane is the one surface bilinear and bicubic must agree on everywhere
+			HeightMap map = Probed((x, y) => 0.02 * x + 0.03 * y + 1);
+
+			foreach (InterpolationMode mode in new[] { InterpolationMode.Bilinear, InterpolationMode.Bicubic })
+			{
+				map.Interpolation = mode;
+
+				Assert.Equal(1 + 0.02 * 3.7 + 0.03 * 6.1, map.InterpolateZ(3.7, 6.1), 6);
+			}
+		}
+
+		[Fact]
+		public void BicubicFollowsCurvatureMoreCloselyThanBilinear()
+		{
+			// a dome sampled coarsely: bilinear cuts the corners, bicubic should not
+			Func<double, double, double> dome = (x, y) => Math.Cos((x - 5) / 10 * Math.PI) * Math.Cos((y - 5) / 10 * Math.PI);
+
+			HeightMap map = Probed(dome, 2.5);
+
+			double bilinearError = 0, bicubicError = 0;
+
+			for (double x = 3; x <= 7; x += 0.37)
+			{
+				for (double y = 3; y <= 7; y += 0.37)
+				{
+					double truth = dome(x, y);
+
+					map.Interpolation = InterpolationMode.Bilinear;
+					bilinearError += Math.Abs(map.InterpolateZ(x, y) - truth);
+
+					map.Interpolation = InterpolationMode.Bicubic;
+					bicubicError += Math.Abs(map.InterpolateZ(x, y) - truth);
+				}
+			}
+
+			Assert.True(bicubicError < bilinearError,
+				$"bicubic error {bicubicError:0.####} should beat bilinear {bilinearError:0.####}");
+		}
+
+		[Fact]
+		public void BicubicFallsBackToBilinearAtTheBorder()
+		{
+			// the 4x4 support window does not exist at the edge; the result must still be
+			// finite and match the probed corner value
+			HeightMap map = Probed((x, y) => 0.1 * x);
+			map.Interpolation = InterpolationMode.Bicubic;
+
+			Assert.Equal(0, map.InterpolateZ(0, 0), 9);
+			Assert.Equal(1, map.InterpolateZ(10, 10), 9);
+		}
 
 
 

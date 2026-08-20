@@ -80,7 +80,22 @@ namespace Isoline.GCode
 			}
 		}
 
+		/// <summary>
+		/// Interpolation scheme used by <see cref="InterpolateZ"/>. Bilinear matches the
+		/// original OpenCNCPilot behaviour and stays the default; bicubic produces a C1
+		/// continuous surface which avoids the faceted ridges bilinear leaves on coarse grids.
+		/// </summary>
+		public InterpolationMode Interpolation { get; set; } = InterpolationMode.Bilinear;
+
 		public double InterpolateZ(double x, double y)
+		{
+			if (Interpolation == InterpolationMode.Bicubic)
+				return InterpolateZBicubic(x, y);
+
+			return InterpolateZBilinear(x, y);
+		}
+
+		private double InterpolateZBilinear(double x, double y)
 		{
 			if (x > Max.X || x < Min.X || y > Max.Y || y < Min.Y)
 				return MaxHeight;
@@ -211,6 +226,60 @@ namespace Isoline.GCode
 			}
 			w.WriteEndElement();
 			w.Close();
+		}
+
+		/// <summary>
+		/// Bicubic (Catmull-Rom) interpolation. Falls back to bilinear near the border where
+		/// the 4x4 support window would leave the grid, so behaviour at the edges is unchanged.
+		/// </summary>
+		private double InterpolateZBicubic(double x, double y)
+		{
+			if (x > Max.X || x < Min.X || y > Max.Y || y < Min.Y)
+				return MaxHeight;
+
+			double gx = (x - Min.X) / GridX;
+			double gy = (y - Min.Y) / GridY;
+
+			int ix = (int)Math.Floor(gx);
+			int iy = (int)Math.Floor(gy);
+
+			if (ix < 1 || iy < 1 || ix > SizeX - 3 || iy > SizeY - 3)
+				return InterpolateZBilinear(x, y);
+
+			double fx = gx - ix;
+			double fy = gy - iy;
+
+			double[] col = new double[4];
+
+			for (int j = 0; j < 4; j++)
+			{
+				double[] row = new double[4];
+
+				for (int i = 0; i < 4; i++)
+				{
+					double? v = Points[ix - 1 + i, iy - 1 + j];
+
+					if (!v.HasValue)
+						return InterpolateZBilinear(x, y);  // hole in the support window
+
+					row[i] = v.Value;
+				}
+
+				col[j] = CatmullRom(row[0], row[1], row[2], row[3], fx);
+			}
+
+			return CatmullRom(col[0], col[1], col[2], col[3], fy);
+		}
+
+		private static double CatmullRom(double p0, double p1, double p2, double p3, double t)
+		{
+			double t2 = t * t;
+			double t3 = t2 * t;
+
+			return 0.5 * ((2 * p1)
+				+ (-p0 + p2) * t
+				+ (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2
+				+ (-p0 + 3 * p1 - 3 * p2 + p3) * t3);
 		}
 
 		public void FillWithTestPattern(string pattern)
