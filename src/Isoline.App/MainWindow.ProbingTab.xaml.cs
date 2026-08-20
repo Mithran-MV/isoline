@@ -41,6 +41,66 @@ namespace Isoline
 			else
 				LabelHeightMapMaxZ.Content = "~";
 
+			UpdateHeightMapSummary();
+		}
+
+		/// <summary>
+		/// Describes how warped the probed surface actually is. "0.14 mm across the board"
+		/// is the number that decides whether height compensation is worth the probe time,
+		/// and it was not shown anywhere before.
+		/// </summary>
+		private void UpdateHeightMapSummary()
+		{
+			if (Map == null)
+			{
+				LabelHeightMapSummary.Text = "";
+				return;
+			}
+
+			GCode.HeightMapStatistics stats = Map.GetStatistics();
+
+			if (stats.Count == 0)
+			{
+				LabelHeightMapSummary.Text = "Nothing probed yet.";
+				return;
+			}
+
+			LabelHeightMapSummary.Text = string.Format(
+				"{0:0.###} mm of warp across {1} points (sigma {2:0.###} mm).",
+				stats.Range, stats.Count, stats.StandardDeviation);
+		}
+
+		/// <summary>
+		/// Applies the interpolation scheme the user picked, and optionally throws out
+		/// probe points that are obviously bad contacts.
+		/// </summary>
+		private void ConfigureMap(GCode.HeightMap map)
+		{
+			if (map == null)
+				return;
+
+			map.Interpolation = Properties.Settings.Default.HeightMapInterpolation == "Bilinear"
+				? GCode.InterpolationMode.Bilinear
+				: GCode.InterpolationMode.Bicubic;
+		}
+
+		/// <summary>
+		/// Runs the outlier filter once probing has finished, and says what it did rather
+		/// than silently altering the operator's measurements.
+		/// </summary>
+		private void RejectProbeOutliers()
+		{
+			if (Map == null || !Properties.Settings.Default.ProbeRejectOutliers)
+				return;
+
+			int replaced = Map.RejectOutliers(Properties.Settings.Default.ProbeOutlierThreshold);
+
+			if (replaced == 0)
+				return;
+
+			ShowNotice("Probe outliers corrected",
+				$"{replaced} probe point(s) disagreed sharply with their neighbours and were replaced with the local median. " +
+				"That usually means swarf or a dirty pad under the probe. Turn this off in Settings if you want the raw data.");
 		}
 
 		private void ButtonHeightmapCreateNew_Click(object sender, RoutedEventArgs e)
@@ -92,6 +152,7 @@ namespace Isoline
 			try
 			{
 				Map = new HeightMap(NewHeightMapDialog.GridSize, NewHeightMapDialog.Min, NewHeightMapDialog.Max);
+				ConfigureMap(Map);
 
 				if (NewHeightMapDialog.GenerateTestPattern)
 				{
@@ -141,6 +202,7 @@ namespace Isoline
 			try
 			{
 				Map = HeightMap.Load(filepath);
+				ConfigureMap(Map);
 			}
 			catch (Exception ex)
 			{
@@ -248,6 +310,9 @@ namespace Isoline
 			Map.NotProbed.RemoveAt(0);
 
 			Map.AddPoint(lastPoint.Item1, lastPoint.Item2, position.Z);
+
+			if (Map.NotProbed.Count == 0)
+				RejectProbeOutliers();
 
 			if (Map.NotProbed.Count == 0)
 			{

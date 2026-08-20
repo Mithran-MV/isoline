@@ -476,6 +476,23 @@
                                 <Button Click="ButtonRapidOverride_Click" Content="100%" Style="{StaticResource styleButton}" Tag="100" Grid.Column="2" Margin="1" Background="{DynamicResource SurfaceOverlayBrush}" Foreground="White"/>
                             </Grid>
 
+                            <!-- how warped the board actually is, plus the colour scale the surface is drawn with -->
+                            <TextBlock Name="LabelHeightMapSummary" Style="{StaticResource BannerBody}" Margin="0,8,0,6" Text=""/>
+
+                            <Grid Margin="0,0,0,4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="low" FontSize="{DynamicResource FontSizeXs}"
+                                           Foreground="{DynamicResource TextSubtleBrush}" VerticalAlignment="Center"/>
+                                <Border Name="HeightMapLegend" Grid.Column="1" Height="10" Margin="6,0"
+                                        CornerRadius="{DynamicResource RadiusPill}"
+                                        BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"/>
+                                <TextBlock Grid.Column="2" Text="high" FontSize="{DynamicResource FontSizeXs}"
+                                           Foreground="{DynamicResource TextSubtleBrush}" VerticalAlignment="Center"/>
+                            </Grid>
                         </StackPanel>
                     </GroupBox>
 

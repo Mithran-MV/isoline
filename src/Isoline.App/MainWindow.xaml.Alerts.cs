@@ -85,6 +85,22 @@ namespace Isoline
 
 		#endregion
 
+		#region Height map colour ramp
+
+		/// <summary>
+		/// Builds the height map material and the matching legend from a single colour ramp.
+		/// </summary>
+		private void ApplyHeightMapColours()
+		{
+			System.Windows.Media.Brush ramp = Visuals.Colormap.CreateBrush(
+				Properties.Settings.Default.HeightMapOpacity, vertical: false);
+
+			ModelHeightMap.Material = new System.Windows.Media.Media3D.DiffuseMaterial(ramp);
+			HeightMapLegend.Background = Visuals.Colormap.CreateBrush(1.0, vertical: false);
+		}
+
+		#endregion
+
 		#region Job progress
 
 		private void UpdateJobProgress()

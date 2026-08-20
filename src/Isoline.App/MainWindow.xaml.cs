@@ -98,6 +98,7 @@ namespace Isoline
 
 			UpdateStatePill();
 			UpdateJobProgress();
+			ApplyHeightMapColours();
 
 			Loaded += MainWindow_Loaded;
 
