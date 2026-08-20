@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 300" width="920" height="300" role="img" aria-label="Isoline pipeline: Gerber to isolation toolpath to G-code, wrapped onto a probed height map, then streamed to the machine">
+  <defs>
+    <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4E4E59"/></marker>
+  </defs>
+  <rect width="920" height="300" fill="#131316"/>
+
+  <rect x="24" y="40" width="626" height="232" rx="10" fill="#16212B" stroke="#2A788E" stroke-width="1.5" opacity="0.5"/>
+  <text x="38" y="30" fill="#767D89" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="10" letter-spacing="1.2">ISOLINE.CORE  —  NO UI, NO WINDOWS, UNIT TESTED</text>
+  <rect x="42" y="58" width="152" height="76" rx="8" fill="#1C1C21" stroke="#32323B" stroke-width="1.5"/>
+  <text x="58" y="84" fill="#F2F3F5" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="14" font-weight="600">Gerber</text>
+  <text x="58" y="104" fill="#A5ABB6" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="11">RS-274X reader,</text>
+  <text x="58" y="119" fill="#A5ABB6" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="11">copper polygons</text>
+  <rect x="238" y="58" width="162" height="76" rx="8" fill="#1C1C21" stroke="#32323B" stroke-width="1.5"/>
+  <text x="254" y="84" fill="#F2F3F5" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="14" font-weight="600">Isolation</text>
+  <text x="254" y="104" fill="#A5ABB6" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="11">offset passes,</text>
+  <text x="254" y="119" fill="#A5ABB6" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="11">travel ordering</text>
+  <rect x="444" y="58" width="162" height="76" rx="8" fill="#1C1C21" stroke="#32323B" stroke-width="1.5"/>
+  <text x="460" y="84" fill="#F2F3F5" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="14" font-weight="600">G-code</text>
+  <text x="460" y="104" fill="#A5ABB6" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="11">parse, split,</text>
+  <text x="460" y="119" fill="#A5ABB6" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="11">arcs to lines</text>
+  <path d="M198,96 L232,96" fill="none" stroke="#4E4E59" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <path d="M404,96 L438,96" fill="none" stroke="#4E4E59" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <rect x="238" y="196" width="162" height="76" rx="8" fill="#1C1C21" stroke="#32323B" stroke-width="1.5"/>
+  <text x="254" y="222" fill="#F2F3F5" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="14" font-weight="600">Height map</text>
+  <text x="254" y="242" fill="#A5ABB6" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="11">probe grid, bicubic,</text>
+  <text x="254" y="257" fill="#A5ABB6" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="11">outlier rejection</text>
+  <path d="M319,192 L319,166 L525,166 L525,140" fill="none" stroke="#4E4E59" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="335" y="160" fill="#A5ABB6" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="11">wrap the toolpath onto the measured surface</text>
+
+  <rect x="686" y="40" width="210" height="232" rx="10" fill="#1F1A16" stroke="#C87137" stroke-width="1.5" opacity="0.5"/>
+  <text x="700" y="30" fill="#767D89" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="10" letter-spacing="1.2">ISOLINE.APP  —  WPF</text>
+  <rect x="704" y="58" width="174" height="64" rx="8" fill="#1C1C21" stroke="#32323B" stroke-width="1.5"/>
+  <text x="720" y="84" fill="#F2F3F5" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="14" font-weight="600">Viewport</text>
+  <text x="720" y="104" fill="#A5ABB6" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="11">3D preview, readout</text>
+  <rect x="704" y="136" width="174" height="64" rx="8" fill="#1C1C21" stroke="#32323B" stroke-width="1.5"/>
+  <text x="720" y="162" fill="#F2F3F5" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="14" font-weight="600">Machine</text>
+  <text x="720" y="182" fill="#A5ABB6" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="11">serial · telnet · websocket</text>
+  <rect x="704" y="214" width="174" height="44" rx="8" fill="#1C1C21" stroke="#32323B" stroke-width="1.5"/>
+  <text x="720" y="240" fill="#F2F3F5" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="14" font-weight="600">Job recovery</text>
+  <path d="M610,88 L698,88" fill="none" stroke="#4E4E59" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <path d="M610,110 L654,110 L654,166 L698,166" fill="none" stroke="#4E4E59" stroke-width="2" marker-end="url(#arrowhead)"/>
+</svg>
