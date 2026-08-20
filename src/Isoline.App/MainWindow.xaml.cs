@@ -38,6 +38,12 @@ namespace Isoline
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
+		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+		{
+			if (!Properties.Settings.Default.FirstRunComplete)
+				ShowFirstRunSetup();
+		}
+
 		public MainWindow()
 		{
 			AppDomain.CurrentDomain.UnhandledException += UnhandledException;
@@ -90,6 +96,7 @@ namespace Isoline
 			UpdateStatePill();
 			UpdateJobProgress();
 
+			Loaded += MainWindow_Loaded;
 
 			UpdateCheck.CheckForUpdate();
 
