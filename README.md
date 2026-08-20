@@ -1,70 +1,145 @@
-# OpenCNCPilot
+<div align="center">
 
-OpenCNCPilot is a GRBL compatible G-Code Sender.
+<img src="docs/logo.png" width="120" alt="Isoline">
 
-Its main feature is its ability to **probe user-defined areas for warpage and wrap the toolpath around the curved surface**.
-This is especially useful for engraving metal surfaces with V-shaped cutters where any deviation in the Z-direction will result in wider or narrower traces, eg for **isolation milling PCBs** where warpage would result in broken or shorted traces.
+# Isoline
 
-![Screenshot](https://raw.githubusercontent.com/martin2250/OpenCNCPilot/master/img/Screenshot.png)
+**Height-mapped isolation milling and G-code sending for Grbl.**
 
-It is written in C# and uses WPF for its UI. Sadly this means that it will not run under linux as Mono does not support WPF.
-The 3D viewport is managed with HelixToolkit.
+Load a Gerber, probe the board, cut traces that stay the same width across a warped surface.
 
-Here is a quick overview on YouTube [https://www.youtube.com/watch?v=XDCu3cgOjCY](https://www.youtube.com/watch?v=XDCu3cgOjCY)  
+[![CI](https://github.com/Mithran-MV/isoline/actions/workflows/ci.yml/badge.svg)](https://github.com/Mithran-MV/isoline/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![.NET 8](https://img.shields.io/badge/.NET-8.0-512BD4.svg)](https://dotnet.microsoft.com/)
 
-### Installation
-**Install .NET 4.6**, this has been the cause of at least 6 support requests so far.  
-Go to the [Releases section](https://github.com/martin2250/OpenCNCPilot/releases/latest) and download the latest binaries (or compile it from source).
-Unzip **all** files to your hard drive and run "OpenCNCPilot.exe"
+</div>
 
-Make sure to use GRBL version 1.1f (later versions may work but are yet untested). **Earlier versions (0.8, 0.9, 1.0) will NOT work!** There are no workarounds, so you need to update your controller to use OpenCNCPilot.
+---
 
-### Quick Start Guide
-Before the first run, you have to select a Serial Port, the selector is hidden in the Settings menu that you can access in the "Machine" tab. Other than that you don't need to modify any settings.  
-Now you can connect to your machine.
+## The problem
 
-Open gcode or height map files by dragging them into the window, or using the according buttons.
+Engraving a PCB with a V-shaped cutter is unforgiving. The tool cuts a V, so the width of
+the trench depends on how deep the tip sits. A board that bows by two tenths of a
+millimetre - which every piece of FR4 does - comes out with traces that are too wide in
+one corner and not cut through at all in the other.
 
-To create a new height map, open the "Probing" tab and click "Create New". You will be asked to enter the dimensions.  
-**Be sure to enter the actual coordinates** eg when your toolpath is in the negative X-direction, enter "-50" to "0" instead of "0" to "50". You can also use the "Size from GCode" button to fill in everything automatically.
-You will see a preview of the area and the individual points in the main window
+The fix is to probe the surface, build a height map of the warp, and bend the toolpath to
+follow it. Isoline does that, and it does the step before it too: it reads the Gerber and
+generates the isolation toolpath itself, so the copper, the height map and the machine all
+live in one coordinate system and one preview.
 
-To probe the area, set up your work coordinate system by going to your selected origin and using the "Zero (G10)" in the "Manual" tab, remember that this doesn't actually send the line, you can review it must send it manually. You can also use G92, but remember that G92 isn't permanent and will be lost after a reset.  
-**Make sure to connect A5 of your Arduino to the tool and GND to your surface**, and hit "Run".
+<img src="docs/pipeline.svg" width="100%" alt="Gerber to isolation toolpath to height-mapped G-code to the machine">
 
-OpenCNCPilot will now probe your board at the locations marked with a red dot and build the map from that data.
+## What it does
 
-Once it's done probing the surface, hit the "Apply HeightMap" button in the "Edit" tab.
-Now you can run the code with the "Start" button in the "File" tab.
+- **Gerber in, toolpath out.** Reads RS-274X copper layers and generates multi-pass
+  isolation toolpaths with configurable tool width, stepover and depth - no external CAM
+  step in between.
+- **Probing and height compensation.** Probes a grid over the work area, then wraps the
+  toolpath onto the measured surface, splitting long moves and arcs so they follow the
+  curve rather than cutting through it.
+- **Bicubic interpolation and outlier rejection.** A gentler, more accurate surface between
+  probe points, and a filter that catches the single bad reading a chip under the probe
+  produces before it drags a whole region of the cut with it.
+- **A sender built for standing at the machine.** Always-visible digital readout, keyboard
+  jogging, decoded alarms, live progress and time remaining.
+- **Job recovery.** An alarm or a lost USB connection no longer means restarting from
+  line 1.
+- **Machine calibration.** Read and write steps/mm, with a wizard that works them out from
+  a measured move.
+- **Grbl, grblHAL, FluidNC and uCNC**, over USB serial, telnet or WebSocket.
 
-### Manual Expressions
+## What changed from OpenCNCPilot
 
-The 1.5 update adds an interpreter for mathematical expressions to use with manual send and macros.
-To use it, enter your expression in parentheses, like so: "G0 X(2*MX - 1)".
+| | OpenCNCPilot 1.5 | Isoline 2.0 |
+|---|---|---|
+| Runtime | .NET Framework 4.6 | .NET 8 |
+| Structure | one WPF project | testable core + WPF shell |
+| Tests | none | 81, running on Linux CI |
+| Gerber to toolpath | external CAM (FlatCAM) | built in |
+| Height map interpolation | bilinear | bilinear or bicubic |
+| Bad probe points | kept | detected and replaced |
+| Interrupted job | restart from line 1 | resume from where it stopped |
+| Steps/mm calibration | type the numbers in yourself | read, measure, compute, write |
+| Firmware | Grbl, uCNC | Grbl, grblHAL, FluidNC, uCNC |
+| Connection | USB, telnet | USB, telnet, WebSocket |
+| Alarms | `ALARM:3` in the console | decoded, with what to do about it |
+| Theme | one dark theme, hard-coded | tokenised dark and light |
 
-Available variables are:
-- MX, MY, MZ: machine position; WX, WY, WZ: work position
-- PMX, PMY, PMZ, PWX, PWY, PWZ: last probed position in machine/work coordinates
-- TLO: current tool length offset
+## Screenshots
 
-the parentheses will be replaced with whatever the expression evaluates to.
-My [Calculator library](https://github.com/martin2250/Calculator) is used to evaluate the expressions.
+> Captures go in `docs/screenshots/` and get linked here. They are the first thing anyone
+> looks at, so they are worth taking on a real job rather than an empty window.
 
-### Notes
-The probing data is stored in an array of (double precision) floats, the intermediate values are obtained via bilinear interpolation between the four nearest points. All GCode commands whose length exceeds the GridSize are split up into sections smaller than the GridSize. This includes arcs.
+## Installing
 
-In the input files, arcs can be defined via center (IJ) coordinates or by a radius (R). The output file will always use IJ notation, absolute coordinates and metric units. Both relative coordinates and imperial units are supported, but are converted to the aforementioned format.
+Grab the latest build from the [releases page](https://github.com/Mithran-MV/isoline/releases)
+and unzip it. Two builds are published:
 
-#### Supported G-Codes:
-* G0, G1	linear motion
-* G2, G3	arc motion
-* G4 dwell
-* G20, G21	units
-* G90, G91	distance mode
-* S spindle speed
-* M M-codes
+| Build | Needs | Use when |
+|---|---|---|
+| `isoline-win-x64.zip` | [.NET 8 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/8.0) | you want a small download |
+| `isoline-win-x64-standalone.zip` | nothing | you want it to just run |
 
-#### Donations
-Since this project did get some attention, I'll include a donation button. Getting this application to a point where it's 'production-ready' took many days of non-stop work before and during the fist three semesters of my physics studies.  
-Please note that my programs will always be (ad-)free  
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7F783UGMYHRWN)
+Windows 10 or later, x64. Grbl 1.1f or newer on the controller.
+
+## Building from source
+
+```bash
+git clone https://github.com/Mithran-MV/isoline.git
+cd isoline
+dotnet build Isoline.sln -c Release
+```
+
+The core and its tests build and run on any platform:
+
+```bash
+dotnet test tests/Isoline.Core.Tests/Isoline.Core.Tests.csproj
+# Passed!  -  Failed: 0, Passed: 81
+```
+
+There is a sample Gerber in [`docs/samples/`](docs/samples) to try the importer with if you
+do not have a board to hand.
+
+The WPF application itself needs `net8.0-windows`; on Linux or macOS you can still
+compile it with `-p:EnableWindowsTargeting=true`, you just cannot run it.
+
+## How it is put together
+
+```
+src/
+  Isoline.Core/          net8.0        - no UI, no Windows, fully unit tested
+    GCode/               parser, writer, arc splitting, height map application
+    HeightMaps/          the probed surface, interpolation, outlier rejection
+    Gerber/              RS-274X reader
+    Toolpaths/           isolation toolpath generation
+    Expressions/         the evaluator behind (MX - 10) style live values
+    Firmware/            per-firmware quirks and code tables
+    Jobs/                job recovery state
+  Isoline.App/           net8.0-windows - WPF shell, machine communication, 3D viewport
+tests/
+  Isoline.Core.Tests/    xUnit
+```
+
+The split is the point. Upstream had the G-code parser importing `HelixToolkit.Wpf` and
+reading the application's settings object, which meant none of it could be tested without
+a window on screen. Everything that does not need a screen now lives in `Isoline.Core`,
+targets plain `net8.0`, and is covered by tests that run on the Linux CI runner - if a
+Windows dependency ever leaks back into the core, the build goes red.
+
+See [docs/architecture.md](docs/architecture.md) for the longer version.
+
+## Credit
+
+Isoline is a fork of [OpenCNCPilot](https://github.com/martin2250/OpenCNCPilot) by
+**Martin Pittermann**, used under the MIT License. The probing and height-map-wrapping
+idea, the G-code parser and the machine protocol handling are his work; this fork
+restructures them, moves them to .NET 8 and builds on top. The full upstream commit
+history is preserved in this repository.
+
+If you find Isoline useful, go and look at the original project too.
+
+## License
+
+MIT - see [LICENSE](LICENSE). Third party components and their licenses are listed in
+[NOTICE](NOTICE).
