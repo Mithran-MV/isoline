@@ -162,7 +162,7 @@ namespace Isoline.Util
 				{ throw new ArgumentOutOfRangeException("value", value, NEGATIVE_MAGNITUDE); }
 
 				if (this == new Vector3(0, 0, 0))
-				{ throw new ArgumentException(ORAGIN_VECTOR_MAGNITUDE, "this"); }
+				{ throw new InvalidOperationException(ORAGIN_VECTOR_MAGNITUDE); }
 
 				this = this * (value / Magnitude);
 			}

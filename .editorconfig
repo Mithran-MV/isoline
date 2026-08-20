@@ -1,0 +1,38 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{cs,xaml}]
+indent_style = tab
+indent_size = 4
+
+[*.{yml,yaml,json,md}]
+indent_style = space
+indent_size = 2
+
+[*.cs]
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+
+# .NET analyzers are on (see Directory.Build.props). The rules below are demoted to
+# suggestions rather than switched off: they are style and micro-optimisation rules that
+# fire in bulk across the code inherited from OpenCNCPilot, and a build reporting two
+# hundred of them is a build where a real warning goes unnoticed. Anything that can
+# indicate a defect - CA2208, CA1854, CA1864, CA2263 - stays a warning.
+dotnet_diagnostic.CA1507.severity = suggestion   # use nameof instead of a string literal
+dotnet_diagnostic.CA1510.severity = suggestion   # ArgumentNullException.ThrowIfNull
+dotnet_diagnostic.CA1822.severity = suggestion   # member can be static
+dotnet_diagnostic.CA1825.severity = suggestion   # Array.Empty instead of new T[0]
+dotnet_diagnostic.CA1834.severity = suggestion   # StringBuilder.Append(char)
+dotnet_diagnostic.CA1846.severity = suggestion   # AsSpan over Substring
+dotnet_diagnostic.CA1847.severity = suggestion   # string.Contains(char)
+dotnet_diagnostic.CA1850.severity = suggestion   # static HashData
+dotnet_diagnostic.CA1861.severity = suggestion   # constant array as a static readonly
+dotnet_diagnostic.CA1865.severity = suggestion   # StartsWith(char)
+dotnet_diagnostic.CA1866.severity = suggestion   # EndsWith(char)

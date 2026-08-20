@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Globalization;
 
 namespace Isoline.Util
 {
 	public class Constants
 	{
-		public static NumberFormatInfo DecimalParseFormat = new NumberFormatInfo() { NumberDecimalSeparator = "." };
+		public static readonly NumberFormatInfo DecimalParseFormat = new NumberFormatInfo() { NumberDecimalSeparator = "." };
 
 		public static NumberFormatInfo DecimalOutputFormat
 		{
@@ -15,15 +15,15 @@ namespace Isoline.Util
 			}
 		}
 
-		public static string FileFilterGCode = "GCode|*.tap;*.nc;*.ngc|All Files|*.*";
-		public static string FileFilterHeightMap = "Height Maps|*.hmap|All Files|*.*";
-		public static string FileFilterSettings = "Grbl settings|*.gbl;*.nc;*.ngc|All Files|*.*";
+		public static readonly string FileFilterGCode = "GCode|*.tap;*.nc;*.ngc|All Files|*.*";
+		public static readonly string FileFilterHeightMap = "Height Maps|*.hmap|All Files|*.*";
+		public static readonly string FileFilterSettings = "Grbl settings|*.gbl;*.nc;*.ngc|All Files|*.*";
 
-		public static string LogFile = "log.txt";
+		public static readonly string LogFile = "log.txt";
 
-		public static char[] NewLines = new char[] { '\n', '\r' };
+		public static readonly char[] NewLines = new char[] { '\n', '\r' };
 
-		public static Version MinimumGrblVersion = new Version(1, 1, (int)'f');
+		public static readonly Version MinimumGrblVersion = new Version(1, 1, (int)'f');
 
 		static Constants()
 		{

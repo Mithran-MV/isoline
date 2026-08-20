@@ -44,7 +44,12 @@ namespace Isoline
 				int number = int.Parse(m.Groups[1].Value);
 				double value = double.Parse(m.Groups[2].Value, Util.Constants.DecimalParseFormat);
 
+				// Not a TryAdd candidate despite what CA1864 suggests: the guarded block builds
+				// a whole row of controls before it has a value to add, and the else branch
+				// updates the existing row rather than the dictionary alone.
+#pragma warning disable CA1864
 				if (!CurrentSettings.ContainsKey(number))
+#pragma warning restore CA1864
 				{
 					RowDefinition rowDef = new RowDefinition();
 					rowDef.Height = new GridLength(25);
@@ -69,9 +74,10 @@ namespace Isoline
 					Grid.SetColumn(num, 0);
 					gridMain.Children.Add(num);
 
-					if (GrblCodeTranslator.Settings.ContainsKey(number))
+					Tuple<string, string, string> labels;
+
+					if (GrblCodeTranslator.Settings.TryGetValue(number, out labels))
 					{
-						Tuple<string, string, string> labels = GrblCodeTranslator.Settings[number];
 
 						TextBlock name = new TextBlock
 						{

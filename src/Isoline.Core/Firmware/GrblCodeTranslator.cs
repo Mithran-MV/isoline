@@ -13,8 +13,8 @@ namespace Isoline.Firmware
 		/// <summary>
 		/// setting name, unit, description
 		/// </summary>
-		public static Dictionary<int, Tuple<string, string, string>> Settings = new Dictionary<int, Tuple<string, string, string>>();
-		public static string Firmware = "not loaded";
+		public static Dictionary<int, Tuple<string, string, string>> Settings { get; } = new Dictionary<int, Tuple<string, string, string>>();
+		public static string Firmware { get; private set; } = "not loaded";
 
 		private static void LoadErr(Dictionary<int, string> dict, string path)
 		{
@@ -139,20 +139,18 @@ namespace Isoline.Firmware
 
 		public static string GetErrorMessage(int errorCode, bool alarm = false)
 		{
+			string message;
+
 			if (!alarm)
 			{
-				if (Errors.ContainsKey(errorCode))
-					return Errors[errorCode];
-				else
-					return $"Unknown Error: {errorCode}";
+				return Errors.TryGetValue(errorCode, out message)
+					? message
+					: $"Unknown Error: {errorCode}";
 			}
-			else
-			{
-				if (Alarms.ContainsKey(errorCode))
-					return Alarms[errorCode];
-				else
-					return $"Unknown Alarm: {errorCode}";
-			}
+
+			return Alarms.TryGetValue(errorCode, out message)
+				? message
+				: $"Unknown Alarm: {errorCode}";
 		}
 
 		static Regex ErrorExp = new Regex(@"error:(\d+)");

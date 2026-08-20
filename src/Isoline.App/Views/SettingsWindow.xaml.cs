@@ -22,7 +22,7 @@ namespace Isoline
 
 			ComboBoxSerialPort_DropDownOpened(null, null);
 
-			comboBoxConnectionType.ItemsSource = Enum.GetValues(typeof(ConnectionType)).Cast<ConnectionType>();
+			comboBoxConnectionType.ItemsSource = Enum.GetValues<ConnectionType>();
 		}
 
 		private void ComboBoxSerialPort_DropDownOpened(object sender, EventArgs e)
@@ -50,10 +50,7 @@ namespace Isoline
 			// fix error of some boards not being listed properly
 			foreach (string port in SerialPort.GetPortNames())
 			{
-				if (!ports.ContainsKey(port))
-				{
-					ports.Add(port, port);
-				}
+				ports.TryAdd(port, port);
 			}
 
 			foreach (var port in ports)

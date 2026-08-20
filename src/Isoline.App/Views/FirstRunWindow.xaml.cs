@@ -30,7 +30,7 @@ namespace Isoline
 
 			ComboFirmware.SelectionChanged += (s, e) => UpdateFirmwareHint();
 
-			ComboConnection.ItemsSource = Enum.GetValues(typeof(ConnectionType)).Cast<ConnectionType>().ToList();
+			ComboConnection.ItemsSource = Enum.GetValues<ConnectionType>().ToList();
 			ComboConnection.SelectedItem = Properties.Settings.Default.ConnectionType;
 
 			ComboBaud.ItemsSource = new[] { 9600, 19200, 38400, 57600, 115200, 230400, 250000 };

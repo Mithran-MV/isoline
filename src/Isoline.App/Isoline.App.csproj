@@ -20,7 +20,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HelixToolkit.Wpf" Version="2.25.0" />
+    <!--
+      HelixToolkit.Wpf still only ships a net462 build, even at 2.27.3, so restoring it
+      into a net8.0-windows project goes through the .NET Framework compatibility shim and
+      NuGet warns about it. That combination is well trodden and the published build runs,
+      so the warning is suppressed here deliberately rather than left to bury real ones.
+    -->
+    <PackageReference Include="HelixToolkit.Wpf" Version="2.27.3" NoWarn="NU1701" />
     <PackageReference Include="System.IO.Ports" Version="8.0.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
     <PackageReference Include="System.Management" Version="8.0.0" />

@@ -13,7 +13,7 @@ namespace Isoline
 	public partial class App : Application
 	{
 		// command line args
-		public static string[] Args;
+		public static string[] Args { get; private set; }
 
 		public const int WM_COPYDATA = 0x004A;
 
