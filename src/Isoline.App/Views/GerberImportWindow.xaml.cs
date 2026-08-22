@@ -52,6 +52,7 @@ namespace Isoline
 			TextSafe.Text = Text(s.IsolationSafeHeight);
 			TextSpindle.Text = Text(s.IsolationSpindleSpeed);
 			CheckOptimise.IsChecked = s.IsolationOptimiseTravel;
+			CheckClimb.IsChecked = s.IsolationClimbMilling;
 		}
 
 		private void SaveDefaults(IsolationOptions options)
@@ -70,6 +71,7 @@ namespace Isoline
 			s.IsolationSafeHeight = options.SafeHeight;
 			s.IsolationSpindleSpeed = options.SpindleSpeed;
 			s.IsolationOptimiseTravel = options.OptimiseTravel;
+			s.IsolationClimbMilling = options.Direction == CutDirection.Climb;
 			s.Save();
 		}
 
@@ -161,6 +163,7 @@ namespace Isoline
 				PlungeRate = Number(TextPlunge, 100),
 				SpindleSpeed = Math.Max(0, Number(TextSpindle, 0)),
 				OptimiseTravel = CheckOptimise.IsChecked == true,
+				Direction = CheckClimb.IsChecked == true ? CutDirection.Climb : CutDirection.Conventional,
 			};
 		}
 

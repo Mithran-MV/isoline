@@ -946,5 +946,17 @@ namespace Isoline.Properties {
                 this["AutoBufferSizeFromFirmware"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsolationClimbMilling {
+            get {
+                return ((bool)(this["IsolationClimbMilling"]));
+            }
+            set {
+                this["IsolationClimbMilling"] = value;
+            }
+        }
     }
 }

@@ -87,6 +87,11 @@
 
                     <CheckBox Name="CheckOptimise" Content="Shorten travel between contours" IsChecked="True"
                               Foreground="{DynamicResource TextMutedBrush}" Margin="0,4,0,0"/>
+
+                    <CheckBox Name="CheckClimb" Content="Climb milling" Checked="Parameter_Changed" Unchecked="Parameter_Changed"
+                              Foreground="{DynamicResource TextMutedBrush}" Margin="0,6,0,0"/>
+                    <TextBlock Style="{StaticResource BannerBody}" Margin="20,2,0,0"
+                               Text="Cleaner trace edges on copper. Leave off if the machine has backlash - climb milling pulls the work into the cutter, and slack in an axis lets it snatch."/>
                 </StackPanel>
             </ScrollViewer>
 
