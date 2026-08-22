@@ -1,6 +1,32 @@
 namespace Isoline.Toolpaths
 {
 	/// <summary>
+	/// Which way round the cutter travels.
+	/// <para>
+	/// Assumes the usual right-hand cutter turning clockwise seen from above
+	/// (M3). Climb milling keeps the tool to the right of its direction of
+	/// travel - clockwise around an island of copper, counter-clockwise inside
+	/// a gap enclosed by copper - so each tooth enters at full chip thickness
+	/// and leaves at zero. On copper that gives a cleaner edge with less burr,
+	/// which on a V-bit isolation cut is the difference between a trace that
+	/// needs deburring and one that does not.
+	/// </para>
+	/// <para>
+	/// Conventional is the safer choice on a machine with backlash in the
+	/// leadscrews, because climb milling pulls the work into the cutter and
+	/// slack in the axis lets it snatch.
+	/// </para>
+	/// </summary>
+	public enum CutDirection
+	{
+		/// <summary>Tool to the left of travel. Tolerant of backlash.</summary>
+		Conventional = 0,
+
+		/// <summary>Tool to the right of travel. Cleaner edge on copper.</summary>
+		Climb = 1,
+	}
+
+	/// <summary>
 	/// Everything the isolation generator needs to turn copper polygons into a cut.
 	/// Defaults are a sane starting point for a 30 degree V-bit at 0.1 mm depth on FR4.
 	/// </summary>
@@ -53,6 +79,16 @@ namespace Isoline.Toolpaths
 
 		/// <summary>Reorder contours to shorten rapid moves between them.</summary>
 		public bool OptimiseTravel { get; set; } = true;
+
+		/// <summary>
+		/// Which way round each contour is cut.
+		/// <para>
+		/// Conventional is the default because it is what the generator did
+		/// before this was configurable, so an existing setup that has been
+		/// dialled in does not change underneath anyone.
+		/// </para>
+		/// </summary>
+		public CutDirection Direction { get; set; } = CutDirection.Conventional;
 
 		/// <summary>
 		/// Effective cut width of a V-shaped cutter at a given depth.

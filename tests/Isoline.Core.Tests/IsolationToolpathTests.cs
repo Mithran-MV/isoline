@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Clipper2Lib;
 using Isoline.Gerber;
 using Isoline.Toolpaths;
@@ -173,6 +175,122 @@ namespace Isoline.Tests
 		{
 			Assert.Throws<ArgumentException>(() =>
 				IsolationToolpathGenerator.GenerateContours(Square(10), new IsolationOptions() { ToolDiameter = diameter }));
+		}
+	}
+
+	/// <summary>
+	/// Which way round the tool goes is not cosmetic on copper: climb milling has each
+	/// tooth enter at full chip thickness and leave at zero, which is what leaves a trace
+	/// edge that does not need deburring. Before this was configurable the generator
+	/// emitted whatever winding Clipper produced, which is conventional in both cases.
+	/// </summary>
+	public class CutDirectionTests
+	{
+		/// <summary>A ring of copper: an outer boundary with a gap enclosed inside it.</summary>
+		private static PathsD Ring()
+		{
+			PathsD outer = new PathsD
+			{
+				new PathD { new PointD(0, 0), new PointD(20, 0), new PointD(20, 20), new PointD(0, 20) },
+			};
+
+			PathsD hole = new PathsD
+			{
+				new PathD { new PointD(6, 6), new PointD(14, 6), new PointD(14, 14), new PointD(6, 14) },
+			};
+
+			return Clipper.Difference(outer, hole, FillRule.NonZero);
+		}
+
+		/// <summary>Reads the cut moves of each contour back out of the program.</summary>
+		private static List<List<PointD>> ContoursFrom(List<string> gcode)
+		{
+			List<List<PointD>> contours = new List<List<PointD>>();
+			List<PointD> current = null;
+
+			foreach (string line in gcode)
+			{
+				if (line.StartsWith("G0 X", StringComparison.Ordinal))
+				{
+					current = new List<PointD>();
+					contours.Add(current);
+					continue;
+				}
+
+				if (current == null || !line.StartsWith("G1 X", StringComparison.Ordinal))
+					continue;
+
+				Match m = Regex.Match(line, @"X(-?[\d.]+) Y(-?[\d.]+)");
+
+				if (m.Success)
+				{
+					current.Add(new PointD(
+						double.Parse(m.Groups[1].Value, CultureInfo.InvariantCulture),
+						double.Parse(m.Groups[2].Value, CultureInfo.InvariantCulture)));
+				}
+			}
+
+			return contours.FindAll(c => c.Count >= 3);
+		}
+
+		private static List<double> SignedAreas(CutDirection direction)
+		{
+			List<string> gcode = IsolationToolpathGenerator.Generate(
+				Ring(),
+				new IsolationOptions() { ToolDiameter = 0.4, Passes = 1, Direction = direction });
+
+			return ContoursFrom(gcode).ConvertAll(c => Clipper.Area(new PathD(c)));
+		}
+
+		[Fact]
+		public void ProducesBothAnOuterRingAndAnEnclosedOne()
+		{
+			// the fixture is only meaningful if it exercises both cases
+			List<double> areas = SignedAreas(CutDirection.Conventional);
+
+			Assert.Equal(2, areas.Count);
+			Assert.Contains(areas, a => Math.Abs(a) > 300);
+			Assert.Contains(areas, a => Math.Abs(a) < 100);
+		}
+
+		[Fact]
+		public void ConventionalRunsRoundCopperTheWayClipperOrdersIt()
+		{
+			// outer ring counter-clockwise, enclosed gap clockwise
+			List<double> areas = SignedAreas(CutDirection.Conventional);
+
+			Assert.True(areas.Find(a => Math.Abs(a) > 300) > 0, "the outer ring should be counter-clockwise");
+			Assert.True(areas.Find(a => Math.Abs(a) < 100) < 0, "the enclosed gap should be clockwise");
+		}
+
+		[Fact]
+		public void ClimbReversesBoth()
+		{
+			// clockwise around an island of copper, counter-clockwise inside a gap it surrounds
+			List<double> areas = SignedAreas(CutDirection.Climb);
+
+			Assert.True(areas.Find(a => Math.Abs(a) > 300) < 0, "the outer ring should be clockwise");
+			Assert.True(areas.Find(a => Math.Abs(a) < 100) > 0, "the enclosed gap should be counter-clockwise");
+		}
+
+		[Fact]
+		public void DirectionChangesNothingButTheDirection()
+		{
+			// the same copper comes off either way; only the order of the points differs
+			List<double> conventional = SignedAreas(CutDirection.Conventional);
+			List<double> climb = SignedAreas(CutDirection.Climb);
+
+			Assert.Equal(conventional.Count, climb.Count);
+
+			for (int i = 0; i < conventional.Count; i++)
+				Assert.Equal(Math.Abs(conventional[i]), Math.Abs(climb[i]), 6);
+		}
+
+		[Fact]
+		public void DefaultsToConventional()
+		{
+			// an existing setup that has been dialled in must not change underneath anyone
+			Assert.Equal(CutDirection.Conventional, new IsolationOptions().Direction);
 		}
 	}
 }

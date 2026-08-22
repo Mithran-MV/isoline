@@ -117,7 +117,7 @@ namespace Isoline.Toolpaths
 
 				foreach (PathD contour in contours)
 				{
-					PathD path = StartAtNearest(contour, position);
+					PathD path = StartAtNearest(Orient(contour, options.Direction), position);
 
 					if (!atSafeHeight)
 						gcode.Add(string.Format(ci, "G0 Z{0:0.###}", options.SafeHeight));
@@ -191,6 +191,32 @@ namespace Isoline.Toolpaths
 			}
 
 			return ordered;
+		}
+
+		/// <summary>
+		/// Turns a contour the way the requested cut direction needs it.
+		/// <para>
+		/// Clipper hands back outer rings counter-clockwise and holes clockwise. For a
+		/// right-hand cutter that is conventional milling in both cases, which is what
+		/// this generator did before the direction could be chosen. Climb milling is the
+		/// reverse of each: clockwise around an island of copper, counter-clockwise inside
+		/// a gap enclosed by it.
+		/// </para>
+		/// </summary>
+		private static PathD Orient(PathD contour, CutDirection direction)
+		{
+			// positive area is an outer ring - the tool runs around the outside of copper;
+			// negative is a hole, where the tool runs inside a gap copper surrounds
+			bool isOuterRing = Clipper.Area(contour) > 0;
+			bool wantCounterClockwise = direction == CutDirection.Climb ? !isOuterRing : isOuterRing;
+
+			if ((Clipper.Area(contour) > 0) == wantCounterClockwise)
+				return contour;
+
+			PathD reversed = new PathD(contour);
+			reversed.Reverse();
+
+			return reversed;
 		}
 
 		/// <summary>
